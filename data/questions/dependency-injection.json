@@ -48,5 +48,270 @@
     ],
     "explanation": "Symfony supports YAML, PHP, and XML for service configuration, as well as auto-discovery. JSON is not a supported format for Symfony DI configuration.",
     "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-005",
+    "type": "single",
+    "question": "What is the consequence of marking a service as private (the default in modern Symfony)?",
+    "answers": [
+      {"id": "a", "text": "It cannot be retrieved directly via $container->get(); it must be injected through dependency injection", "correct": true},
+      {"id": "b", "text": "It cannot have any dependencies", "correct": false},
+      {"id": "c", "text": "It is removed from the compiled container at runtime", "correct": false},
+      {"id": "d", "text": "It can only be used in dev and test environments", "correct": false}
+    ],
+    "explanation": "Private services are inlined and removed from the public container map. You cannot fetch them directly with $container->get(); you must inject them. This enables aggressive optimizations (inlining, removal of unused services).",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-006",
+    "type": "single",
+    "question": "What does autoconfigure: true do for a service?",
+    "answers": [
+      {"id": "a", "text": "It applies tags automatically based on the interfaces the service implements (e.g. EventSubscriberInterface → kernel.event_subscriber)", "correct": true},
+      {"id": "b", "text": "It generates the service ID automatically from the class name", "correct": false},
+      {"id": "c", "text": "It auto-creates a configuration file for the service in config/packages/", "correct": false},
+      {"id": "d", "text": "It enables lazy loading for the service", "correct": false}
+    ],
+    "explanation": "Autoconfigure detects well-known interfaces (EventSubscriberInterface, Command, Voter, etc.) and applies the corresponding tags. Combined with autowiring it removes most boilerplate: drop the class in src/ and it's wired and tagged.",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-007",
+    "type": "boolean",
+    "question": "Two services that implement the same interface can both be auto-injected by type-hinting the interface — Symfony picks one automatically.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "When several services implement the same interface, Symfony cannot guess which one to inject — the autowiring fails. Resolve it by setting an alias from the interface to the desired class, or by using #[Target] / named arguments.",
+    "doc_url": "https://symfony.com/doc/current/service_container/autowiring.html"
+  },
+  {
+    "id": "di-008",
+    "type": "single",
+    "question": "Which attribute lets you inject a specific value (parameter, env var or service ID) into a single argument of a service?",
+    "answers": [
+      {"id": "a", "text": "#[Autowire(...)] from Symfony\\Component\\DependencyInjection\\Attribute", "correct": true},
+      {"id": "b", "text": "#[Inject(...)]", "correct": false},
+      {"id": "c", "text": "#[Wire(...)]", "correct": false},
+      {"id": "d", "text": "#[Service(...)]", "correct": false}
+    ],
+    "explanation": "#[Autowire] supports several forms: #[Autowire(service: 'monolog.logger.request')], #[Autowire('%kernel.project_dir%')], #[Autowire(env: 'APP_SECRET')], #[Autowire(expression: 'service(...).getX()')], etc.",
+    "doc_url": "https://symfony.com/doc/current/service_container/autowiring.html"
+  },
+  {
+    "id": "di-009",
+    "type": "single",
+    "question": "How do you inject every service tagged with 'app.handler' as an iterable into another service?",
+    "answers": [
+      {"id": "a", "text": "Use #[AutowireIterator('app.handler')] or !tagged_iterator app.handler in YAML", "correct": true},
+      {"id": "b", "text": "Use #[Autowire(tag: 'app.handler')]", "correct": false},
+      {"id": "c", "text": "Type-hint iterable<HandlerInterface> — Symfony auto-detects tagged services", "correct": false},
+      {"id": "d", "text": "Inject the container and call $container->findTaggedServiceIds()", "correct": false}
+    ],
+    "explanation": "Symfony provides #[AutowireIterator] (and the YAML !tagged_iterator) to inject all services with a given tag as a Generator. Use #[AutowireLocator] / !tagged_locator for a lazy ServiceLocator instead.",
+    "doc_url": "https://symfony.com/doc/current/service_container/tags.html"
+  },
+  {
+    "id": "di-010",
+    "type": "multiple",
+    "question": "Which of the following are valid Symfony DI attributes? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "#[AsAlias]", "correct": true},
+      {"id": "b", "text": "#[AsDecorator]", "correct": true},
+      {"id": "c", "text": "#[AsTaggedItem]", "correct": true},
+      {"id": "d", "text": "#[AsContainer]", "correct": false}
+    ],
+    "explanation": "Symfony ships #[Autowire], #[Autoconfigure], #[AutoconfigureTag], #[AsAlias], #[AsDecorator], #[AsTaggedItem], #[AsEventListener], #[AsCommand], #[AsMessageHandler], #[Lazy], #[Target], #[When], #[Exclude], etc. There is no #[AsContainer].",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-011",
+    "type": "single",
+    "question": "What does the 'parent' option do on a service definition?",
+    "answers": [
+      {"id": "a", "text": "It inherits arguments, calls and tags from another service definition (typically marked abstract)", "correct": true},
+      {"id": "b", "text": "It adds a parent class to the service at runtime", "correct": false},
+      {"id": "c", "text": "It sets the service to extend the kernel class", "correct": false},
+      {"id": "d", "text": "It links the service to its parent bundle's configuration", "correct": false}
+    ],
+    "explanation": "Parent services let several similar services share a base configuration. The base service is typically marked abstract: true so it isn't instantiated; children inherit and may override individual options.",
+    "doc_url": "https://symfony.com/doc/current/service_container/parent_services.html"
+  },
+  {
+    "id": "di-012",
+    "type": "boolean",
+    "question": "When you decorate a service with 'decorates: original.id', the original service is renamed and made available as the decorator's '.inner' (by default).",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Symfony rewrites the original service ID to '<decorator>.inner' (configurable via decoration_inner_name) and registers the decorator under the original ID. The decorator typically takes the inner service as a constructor argument and delegates to it.",
+    "doc_url": "https://symfony.com/doc/current/service_container/service_decoration.html"
+  },
+  {
+    "id": "di-013",
+    "type": "single",
+    "question": "Which option do you use to control the order when multiple decorators target the same service?",
+    "answers": [
+      {"id": "a", "text": "decoration_priority (higher priority is the outermost wrapper)", "correct": true},
+      {"id": "b", "text": "decoration_order", "correct": false},
+      {"id": "c", "text": "decoration_index", "correct": false},
+      {"id": "d", "text": "priority on the original service", "correct": false}
+    ],
+    "explanation": "decoration_priority is an integer (default 0); higher priorities are applied later, ending up as the outermost wrapper. The decorator's #[AsDecorator] attribute exposes the same option.",
+    "doc_url": "https://symfony.com/doc/current/service_container/service_decoration.html"
+  },
+  {
+    "id": "di-014",
+    "type": "single",
+    "question": "What is the purpose of marking a service as 'lazy: true'?",
+    "answers": [
+      {"id": "a", "text": "Symfony injects a proxy that instantiates the real service only when one of its methods is called", "correct": true},
+      {"id": "b", "text": "Symfony delays loading the service until the next HTTP request", "correct": false},
+      {"id": "c", "text": "Symfony caches the service result to avoid recomputation", "correct": false},
+      {"id": "d", "text": "Symfony schedules the service to run asynchronously", "correct": false}
+    ],
+    "explanation": "Lazy services help break expensive instantiation chains: a proxy is injected, and the real service is created on first method call. Useful when the service is rarely used or has heavy constructor logic.",
+    "doc_url": "https://symfony.com/doc/current/service_container/lazy_services.html"
+  },
+  {
+    "id": "di-015",
+    "type": "single",
+    "question": "What is the purpose of the 'factory' option on a service definition?",
+    "answers": [
+      {"id": "a", "text": "It tells the container to call a method/callable to instantiate the service instead of using 'new Class(...)'", "correct": true},
+      {"id": "b", "text": "It registers a factory class as a service in the container", "correct": false},
+      {"id": "c", "text": "It marks the service as abstract", "correct": false},
+      {"id": "d", "text": "It enables sharing the service across multiple containers", "correct": false}
+    ],
+    "explanation": "factory accepts ['Class', 'staticMethod'], ['@service', 'method'], or '@service' (invokable). Symfony calls the factory with the configured arguments and uses the result as the service instance.",
+    "doc_url": "https://symfony.com/doc/current/service_container/factories.html"
+  },
+  {
+    "id": "di-016",
+    "type": "single",
+    "question": "What is a Service Locator (e.g. injected via #[AutowireLocator] or implementing ServiceSubscriberInterface) used for?",
+    "answers": [
+      {"id": "a", "text": "Lazily fetching a curated subset of services without injecting all of them at construction time", "correct": true},
+      {"id": "b", "text": "Locating physical files on disk", "correct": false},
+      {"id": "c", "text": "Replacing the entire DI container with a smaller alternative", "correct": false},
+      {"id": "d", "text": "Mapping URLs to controllers", "correct": false}
+    ],
+    "explanation": "A ServiceLocator is a small PSR-11-like object that exposes only a fixed set of services and instantiates them on demand. It is the recommended way to get lazy access to several services without depending on the full container.",
+    "doc_url": "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+  },
+  {
+    "id": "di-017",
+    "type": "boolean",
+    "question": "By default, every class autoloaded via the 'App\\\\: resource: ../src/' rule in services.yaml is automatically registered as a service.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "The default services.yaml registers every class under src/ as a service with autowire/autoconfigure. The 'exclude' option lets you opt out specific paths (e.g. Entity/, DTO/) that shouldn't be services.",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-018",
+    "type": "single",
+    "question": "What does $this->bind('$projectDir', '%kernel.project_dir%') achieve when placed under _defaults in services.yaml?",
+    "answers": [
+      {"id": "a", "text": "Any service argument named $projectDir is bound to the kernel.project_dir parameter", "correct": true},
+      {"id": "b", "text": "It registers a new container parameter named $projectDir", "correct": false},
+      {"id": "c", "text": "It only affects controllers, not regular services", "correct": false},
+      {"id": "d", "text": "It is a no-op unless the receiving class declares #[Autowire]", "correct": false}
+    ],
+    "explanation": "_defaults: bind: { $projectDir: '%kernel.project_dir%' } applies to every service whose constructor (or method) has an argument named $projectDir. It also accepts type-hint keys like 'Psr\\Log\\LoggerInterface $myLogger'.",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-019",
+    "type": "multiple",
+    "question": "Which of the following are well-known service tags in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "kernel.event_subscriber", "correct": true},
+      {"id": "b", "text": "console.command", "correct": true},
+      {"id": "c", "text": "twig.extension", "correct": true},
+      {"id": "d", "text": "kernel.compiler_pass", "correct": false}
+    ],
+    "explanation": "Symfony uses tags like kernel.event_subscriber, kernel.event_listener, console.command, twig.extension, validator.constraint_validator, security.voter, messenger.message_handler, etc. Compiler passes are registered programmatically, not via a tag.",
+    "doc_url": "https://symfony.com/doc/current/reference/dic_tags.html"
+  },
+  {
+    "id": "di-020",
+    "type": "single",
+    "question": "How does the 'calls' option configure a service?",
+    "answers": [
+      {"id": "a", "text": "It tells the container to call setter methods on the service after construction", "correct": true},
+      {"id": "b", "text": "It schedules HTTP calls performed by the service", "correct": false},
+      {"id": "c", "text": "It limits how many times the service can be called per request", "correct": false},
+      {"id": "d", "text": "It exposes the service through specific HTTP methods", "correct": false}
+    ],
+    "explanation": "calls is the YAML/PHP equivalent of setter injection: each entry is a method name with arguments. Useful when constructor injection isn't possible (e.g. circular reference, or third-party class with setters).",
+    "doc_url": "https://symfony.com/doc/current/service_container/calls.html"
+  },
+  {
+    "id": "di-021",
+    "type": "single",
+    "question": "What does a synthetic service represent?",
+    "answers": [
+      {"id": "a", "text": "A service injected at runtime by external code (e.g. the Kernel itself), not instantiated by the container", "correct": true},
+      {"id": "b", "text": "A service generated automatically from an interface", "correct": false},
+      {"id": "c", "text": "A service whose definition is computed by a compiler pass", "correct": false},
+      {"id": "d", "text": "A test double automatically created in the test environment", "correct": false}
+    ],
+    "explanation": "synthetic: true tells the container that the service is provided externally (typically via $container->set('id', $instance)). The Kernel is the canonical example: it sets itself on the container at boot time.",
+    "doc_url": "https://symfony.com/doc/current/service_container/synthetic_services.html"
+  },
+  {
+    "id": "di-022",
+    "type": "single",
+    "question": "Inside a Compiler Pass, which method is used to find every service definition tagged with 'app.handler'?",
+    "answers": [
+      {"id": "a", "text": "$container->findTaggedServiceIds('app.handler')", "correct": true},
+      {"id": "b", "text": "$container->findByTag('app.handler')", "correct": false},
+      {"id": "c", "text": "$container->getTaggedServices('app.handler')", "correct": false},
+      {"id": "d", "text": "$container->collectTags('app.handler')", "correct": false}
+    ],
+    "explanation": "ContainerBuilder::findTaggedServiceIds() returns an array of [serviceId => attributes[]]. Each attributes array contains the data passed to each tag occurrence, allowing prioritization (priority option) and metadata.",
+    "doc_url": "https://symfony.com/doc/current/service_container/tags.html"
+  },
+  {
+    "id": "di-023",
+    "type": "single",
+    "question": "Which attribute lets you exclude a class from auto-registration when it is otherwise picked up by the resource glob?",
+    "answers": [
+      {"id": "a", "text": "#[Exclude]", "correct": true},
+      {"id": "b", "text": "#[NotAService]", "correct": false},
+      {"id": "c", "text": "#[Skip]", "correct": false},
+      {"id": "d", "text": "#[Ignore]", "correct": false}
+    ],
+    "explanation": "Placing #[Exclude] on a class instructs the autowiring loader to skip it, even if it falls under the glob in services.yaml. Useful for DTOs, value objects or test fixtures co-located with services.",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-024",
+    "type": "boolean",
+    "question": "Service IDs in modern Symfony are typically the fully-qualified class name (FQCN) of the service.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Using the FQCN as the service ID is what makes autowiring by type-hint work transparently: when a constructor expects App\\Mailer\\Sender, the container looks up the service with that exact ID. Aliases handle interfaces or alternate names.",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  },
+  {
+    "id": "di-025",
+    "type": "single",
+    "question": "Which YAML directive lets you apply tags or other configuration to every service that implements a given interface, automatically, when loading from a resource?",
+    "answers": [
+      {"id": "a", "text": "_instanceof", "correct": true},
+      {"id": "b", "text": "_traits", "correct": false},
+      {"id": "c", "text": "_decorates", "correct": false},
+      {"id": "d", "text": "_extends", "correct": false}
+    ],
+    "explanation": "_instanceof in services.yaml takes an interface or class FQCN as key and applies its options (tags, public, lazy, calls...) to every service in the same file that is an instance of it. Great for marking voters, handlers, etc.",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
   }
 ]

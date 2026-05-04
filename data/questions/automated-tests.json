@@ -48,5 +48,270 @@
     ],
     "explanation": "Symfony officially supports unit, functional, and integration tests. Contract testing is a concept (e.g., Pact) not built into Symfony's test infrastructure.",
     "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-005",
+    "type": "single",
+    "question": "Which method must you call before accessing services in a KernelTestCase test?",
+    "answers": [
+      {"id": "a", "text": "self::bootKernel()", "correct": true},
+      {"id": "b", "text": "self::createKernel()", "correct": false},
+      {"id": "c", "text": "self::initializeKernel()", "correct": false},
+      {"id": "d", "text": "self::warmupCache()", "correct": false}
+    ],
+    "explanation": "bootKernel() instantiates the Kernel and boots it, exposing the container via static::getContainer(). createKernel() only instantiates without booting; bootKernel() is the convenience wrapper for tests.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-006",
+    "type": "single",
+    "question": "Why does static::getContainer() in tests give access to private services that are normally inlined in production?",
+    "answers": [
+      {"id": "a", "text": "In the test environment, Symfony exposes a special test container that keeps private services accessible for inspection", "correct": true},
+      {"id": "b", "text": "Private services are publicly accessible in every environment, this is a documentation myth", "correct": false},
+      {"id": "c", "text": "PHPUnit uses reflection to bypass DI visibility rules", "correct": false},
+      {"id": "d", "text": "It only works for services tagged with kernel.public", "correct": false}
+    ],
+    "explanation": "The 'test' environment registers a special container service ('test.service_container') that retains private services. Access via static::getContainer() (or self::$container in older versions) makes them retrievable for testing.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-007",
+    "type": "boolean",
+    "question": "WebTestCase is a subclass of KernelTestCase that adds the createClient() method to simulate HTTP requests.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "WebTestCase extends KernelTestCase. createClient() returns a KernelBrowser that wraps the Kernel as a virtual browser, enabling functional tests without a running web server.",
+    "doc_url": "https://symfony.com/doc/current/testing.html#functional-tests"
+  },
+  {
+    "id": "tests-008",
+    "type": "multiple",
+    "question": "Which of the following are built-in Symfony assertions for response inspection? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "assertResponseIsSuccessful()", "correct": true},
+      {"id": "b", "text": "assertResponseRedirects()", "correct": true},
+      {"id": "c", "text": "assertSelectorTextContains()", "correct": true},
+      {"id": "d", "text": "assertResponseIsCacheable()", "correct": false}
+    ],
+    "explanation": "Symfony provides assertResponseIsSuccessful, assertResponseStatusCodeSame, assertResponseRedirects, assertResponseHasHeader, assertResponseHasCookie, assertSelectorExists, assertSelectorCount, assertSelectorTextContains, assertPageTitleSame, etc. There is no assertResponseIsCacheable().",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-009",
+    "type": "single",
+    "question": "How do you authenticate a test client as a given user without going through the login form?",
+    "answers": [
+      {"id": "a", "text": "$client->loginUser($user)", "correct": true},
+      {"id": "b", "text": "$client->setUser($user)", "correct": false},
+      {"id": "c", "text": "$client->authenticate($user)", "correct": false},
+      {"id": "d", "text": "$client->getRequest()->setUser($user)", "correct": false}
+    ],
+    "explanation": "loginUser() bypasses the authenticator and stores a token directly in the security context for the next request. Optional second/third arguments let you pick the firewall and pass token attributes.",
+    "doc_url": "https://symfony.com/doc/current/testing.html#logging-in-users-authentication"
+  },
+  {
+    "id": "tests-010",
+    "type": "single",
+    "question": "What does the Crawler's filter('h1.title') method return?",
+    "answers": [
+      {"id": "a", "text": "A new Crawler containing nodes that match the CSS selector", "correct": true},
+      {"id": "b", "text": "An array of strings (the inner texts)", "correct": false},
+      {"id": "c", "text": "A boolean indicating whether at least one node matches", "correct": false},
+      {"id": "d", "text": "A DOMNodeList that must be wrapped manually", "correct": false}
+    ],
+    "explanation": "filter() narrows the current Crawler to nodes matching the CSS selector. Use ->text(), ->attr(), ->each(...) to extract data from the matched nodes. filterXPath() does the same with XPath expressions.",
+    "doc_url": "https://symfony.com/doc/current/components/dom_crawler.html"
+  },
+  {
+    "id": "tests-011",
+    "type": "single",
+    "question": "Which library is commonly added (composer require --dev dama/doctrine-test-bundle) to ensure database tests are isolated?",
+    "answers": [
+      {"id": "a", "text": "DAMADoctrineTestBundle — wraps each test in a transaction that is rolled back at the end", "correct": true},
+      {"id": "b", "text": "Symfony's built-in TransactionalTestCase", "correct": false},
+      {"id": "c", "text": "Doctrine\\TestUtils\\IsolationTrait", "correct": false},
+      {"id": "d", "text": "PHPUnit's @transactional annotation", "correct": false}
+    ],
+    "explanation": "DAMADoctrineTestBundle wraps each test in a database transaction and rolls it back after the test, leaving the database in a known state. Symfony does not ship a built-in equivalent.",
+    "doc_url": "https://symfony.com/doc/current/testing.html#configuring-a-database-for-tests"
+  },
+  {
+    "id": "tests-012",
+    "type": "boolean",
+    "question": "By default, the Crawler component does not execute JavaScript — it only parses the static HTML returned by the server.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "DomCrawler operates on the DOM but cannot execute JS. For JS-based interactions or single-page applications, use Symfony Panther, which drives a real browser via WebDriver (Chrome/Firefox).",
+    "doc_url": "https://symfony.com/doc/current/components/dom_crawler.html"
+  },
+  {
+    "id": "tests-013",
+    "type": "single",
+    "question": "What is the purpose of $client->followRedirect()?",
+    "answers": [
+      {"id": "a", "text": "It manually follows the last response's Location header and returns the resulting Crawler", "correct": true},
+      {"id": "b", "text": "It enables automatic redirects for all subsequent requests", "correct": false},
+      {"id": "c", "text": "It disables HTTP redirect handling", "correct": false},
+      {"id": "d", "text": "It returns the redirect status code only", "correct": false}
+    ],
+    "explanation": "By default, the test client does not follow redirects automatically — you must call followRedirect() to load the target URL. To enable automatic following globally, call $client->followRedirects(true).",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-014",
+    "type": "single",
+    "question": "Which assertion checks that exactly one email was sent during the request?",
+    "answers": [
+      {"id": "a", "text": "$this->assertEmailCount(1)", "correct": true},
+      {"id": "b", "text": "$this->assertSingleEmail()", "correct": false},
+      {"id": "c", "text": "$this->assertMailerSent(1)", "correct": false},
+      {"id": "d", "text": "$this->assertEquals(1, count($mailer->getEmails()))", "correct": false}
+    ],
+    "explanation": "Symfony provides assertEmailCount, assertEmailHtmlBodyContains, assertEmailTextBodyContains, assertEmailHeaderSame, assertEmailAddressContains. They work because the test environment captures emails instead of actually sending them.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-015",
+    "type": "single",
+    "question": "How do you simulate a JSON request body in a functional test?",
+    "answers": [
+      {"id": "a", "text": "Pass the JSON string as 'content' and set 'CONTENT_TYPE' => 'application/json' in the server array", "correct": true},
+      {"id": "b", "text": "Use $client->json('POST', '/api', $data)", "correct": false},
+      {"id": "c", "text": "Pass the array directly as the third argument; Symfony detects JSON automatically", "correct": false},
+      {"id": "d", "text": "Set $request->setMethod('JSON')", "correct": false}
+    ],
+    "explanation": "$client->request('POST', '/api', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($data)). The 5th positional argument is the server array (HTTP headers under SERVER variables); the 6th is the raw body content.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-016",
+    "type": "single",
+    "question": "How do you replace a service with a mock in a functional test?",
+    "answers": [
+      {"id": "a", "text": "static::getContainer()->set('App\\\\Mailer\\\\Sender', $mock)", "correct": true},
+      {"id": "b", "text": "$client->mock('App\\\\Mailer\\\\Sender', $mock)", "correct": false},
+      {"id": "c", "text": "$container->replace('App\\\\Mailer\\\\Sender', $mock)", "correct": false},
+      {"id": "d", "text": "PHPUnit's createMock() — Symfony picks it up automatically", "correct": false}
+    ],
+    "explanation": "The test container exposes set() to override services with test doubles. Combine with PHPUnit's createMock() or Prophecy. This technique works because the test container is mutable, unlike production.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-017",
+    "type": "boolean",
+    "question": "When you call createClient() a second time in the same test, you must call ensureKernelShutdown() first to avoid 'kernel has already been booted' errors.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "createClient() boots the kernel; trying to boot it again throws. ensureKernelShutdown() (or letting Symfony's TestCase handle teardown) resets state so a fresh client can be created in the same test.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-018",
+    "type": "single",
+    "question": "Which file lets you define environment variables specific to the 'test' environment?",
+    "answers": [
+      {"id": "a", "text": ".env.test (and .env.test.local for machine-specific overrides)", "correct": true},
+      {"id": "b", "text": ".phpunit.env", "correct": false},
+      {"id": "c", "text": "tests/env.yaml", "correct": false},
+      {"id": "d", "text": "config/test/env.php", "correct": false}
+    ],
+    "explanation": ".env.test is committed to git; .env.test.local is for developer-specific overrides and is git-ignored. Note that .env.local is intentionally NOT loaded in the test environment to keep CI runs reproducible.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-019",
+    "type": "single",
+    "question": "What does $client->enableProfiler() do in a functional test?",
+    "answers": [
+      {"id": "a", "text": "It activates the WebProfiler for the next request so you can inspect data collectors (DB queries, mails, etc.)", "correct": true},
+      {"id": "b", "text": "It enables Xdebug profiling for the rest of the test", "correct": false},
+      {"id": "c", "text": "It returns runtime statistics for the previous request", "correct": false},
+      {"id": "d", "text": "It is required to capture emails sent during the test", "correct": false}
+    ],
+    "explanation": "Profiler collection is disabled in tests for performance. enableProfiler() turns it on for the next request; afterwards $client->getProfile() exposes collectors like 'db', 'mailer', 'security' for assertions.",
+    "doc_url": "https://symfony.com/doc/current/testing/profiling.html"
+  },
+  {
+    "id": "tests-020",
+    "type": "multiple",
+    "question": "Which of the following are valid ways to interact with a form in a Symfony functional test? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "$client->submitForm('Save', ['post[title]' => 'Hello'])", "correct": true},
+      {"id": "b", "text": "$crawler->selectButton('Save')->form()", "correct": true},
+      {"id": "c", "text": "$crawler->filter('form')->submit()", "correct": true},
+      {"id": "d", "text": "$client->postForm('/save', $data)", "correct": false}
+    ],
+    "explanation": "submitForm() is the high-level helper. Alternatively, get the Form object via selectButton()->form() or filter()->form(), set its values, and pass it to $client->submit(). There is no postForm() method.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-021",
+    "type": "single",
+    "question": "Which class can drive a real browser (Chrome/Firefox) in end-to-end tests via WebDriver?",
+    "answers": [
+      {"id": "a", "text": "Symfony\\Component\\Panther\\PantherTestCase (from symfony/panther)", "correct": true},
+      {"id": "b", "text": "Symfony\\Bundle\\FrameworkBundle\\Test\\BrowserTestCase", "correct": false},
+      {"id": "c", "text": "PHPUnit\\Browser\\WebDriverTestCase", "correct": false},
+      {"id": "d", "text": "Symfony\\Component\\Browser\\E2ETestCase", "correct": false}
+    ],
+    "explanation": "Panther is a separate package (symfony/panther). PantherTestCase::createPantherClient() drives a real browser via WebDriver, supports JavaScript, takes screenshots, and exposes Crawler-like APIs.",
+    "doc_url": "https://symfony.com/doc/current/testing/end_to_end.html"
+  },
+  {
+    "id": "tests-022",
+    "type": "boolean",
+    "question": "By default, the Symfony test client does not throw exceptions raised inside the application — they are converted to a 5xx response.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "The client mirrors a real browser: exceptions are caught and rendered as error responses (the configured exception listener). Call $client->catchExceptions(false) to make exceptions bubble up to PHPUnit, which is useful when debugging unexpected failures.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-023",
+    "type": "single",
+    "question": "Which directory is conventionally used for PHPUnit test classes in a Symfony application?",
+    "answers": [
+      {"id": "a", "text": "tests/", "correct": true},
+      {"id": "b", "text": "src/Tests/", "correct": false},
+      {"id": "c", "text": "spec/", "correct": false},
+      {"id": "d", "text": "test/", "correct": false}
+    ],
+    "explanation": "By convention (and the default phpunit.xml.dist generated by Flex), tests live under tests/ and are autoloaded under the App\\Tests\\ namespace via composer.json's autoload-dev section.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-024",
+    "type": "single",
+    "question": "What does $client->getCookieJar() expose during functional tests?",
+    "answers": [
+      {"id": "a", "text": "The cookies that have been received and will be sent on the next request", "correct": true},
+      {"id": "b", "text": "Only cookies set by the test (not those received from the response)", "correct": false},
+      {"id": "c", "text": "The session storage, since cookies and sessions are merged", "correct": false},
+      {"id": "d", "text": "An immutable array — cookies cannot be added in tests", "correct": false}
+    ],
+    "explanation": "The cookie jar persists cookies between requests like a browser would. You can inspect, add, or remove cookies for fine-grained control (e.g., manually setting a remember-me cookie before making a request).",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  },
+  {
+    "id": "tests-025",
+    "type": "single",
+    "question": "Which option of $client->insulate(true) accomplishes?",
+    "answers": [
+      {"id": "a", "text": "It runs each request in a separate PHP process to avoid state leaking between them", "correct": true},
+      {"id": "b", "text": "It disables session sharing between requests of the same test", "correct": false},
+      {"id": "c", "text": "It hides the response from PHPUnit's failure output", "correct": false},
+      {"id": "d", "text": "It marks the client as read-only", "correct": false}
+    ],
+    "explanation": "insulate(true) tells the client to dispatch each request in a separate PHP process (via process forking). This guarantees no global state leaks between requests, at the cost of slower execution. Rarely needed in practice.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
   }
 ]

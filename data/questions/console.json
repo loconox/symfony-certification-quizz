@@ -48,5 +48,270 @@
     ],
     "explanation": "Symfony Console provides ProgressBar, Table, QuestionHelper (for interactive prompts), DebugFormatterHelper, and more. There is no built-in FileDownloader helper.",
     "doc_url": "https://symfony.com/doc/current/components/console/helpers/index.html"
+  },
+  {
+    "id": "console-005",
+    "type": "single",
+    "question": "Which exit-code constant should a successful command return?",
+    "answers": [
+      {"id": "a", "text": "Command::SUCCESS (0)", "correct": true},
+      {"id": "b", "text": "Command::OK (1)", "correct": false},
+      {"id": "c", "text": "Command::DONE (200)", "correct": false},
+      {"id": "d", "text": "Command::COMPLETED (-1)", "correct": false}
+    ],
+    "explanation": "Symfony's Command class exposes three constants: SUCCESS = 0, FAILURE = 1, INVALID = 2 (for misuse, e.g. invalid arguments). Returning 0 also works but the constants make intent clear.",
+    "doc_url": "https://symfony.com/doc/current/console.html"
+  },
+  {
+    "id": "console-006",
+    "type": "single",
+    "question": "What is the difference between an InputArgument and an InputOption in Symfony Console?",
+    "answers": [
+      {"id": "a", "text": "Arguments are positional and unprefixed; options are named and prefixed with -- (or - for shortcuts)", "correct": true},
+      {"id": "b", "text": "Arguments are required, options are always optional", "correct": false},
+      {"id": "c", "text": "Arguments are typed, options are always strings", "correct": false},
+      {"id": "d", "text": "Arguments are used for input, options for output", "correct": false}
+    ],
+    "explanation": "Arguments come in a defined order on the CLI (e.g. app:greet John), options are passed as flags (--name=John or -n John). Arguments may be required or optional independently of being arguments.",
+    "doc_url": "https://symfony.com/doc/current/console/input.html"
+  },
+  {
+    "id": "console-007",
+    "type": "boolean",
+    "question": "By default, output written with $output->writeln() at no specific verbosity is shown only when the user runs the command without -q/--quiet.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "writeln() defaults to OutputInterface::VERBOSITY_NORMAL. It is shown unless --quiet is passed. To gate output behind -v/-vv/-vvv, pass the appropriate verbosity constant as the second argument.",
+    "doc_url": "https://symfony.com/doc/current/console/verbosity.html"
+  },
+  {
+    "id": "console-008",
+    "type": "single",
+    "question": "Which trait prevents a command from running concurrently with another instance of itself?",
+    "answers": [
+      {"id": "a", "text": "LockableTrait — call $this->lock() and $this->release()", "correct": true},
+      {"id": "b", "text": "SingletonTrait", "correct": false},
+      {"id": "c", "text": "ConcurrentSafeTrait", "correct": false},
+      {"id": "d", "text": "AtomicTrait", "correct": false}
+    ],
+    "explanation": "LockableTrait uses the Lock component under the hood. $this->lock() acquires a named lock (defaulting to the command name); if it fails, the command should exit early. $this->release() releases it.",
+    "doc_url": "https://symfony.com/doc/current/console/lockable_trait.html"
+  },
+  {
+    "id": "console-009",
+    "type": "multiple",
+    "question": "Which of the following are valid InputOption modes? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "VALUE_NONE", "correct": true},
+      {"id": "b", "text": "VALUE_REQUIRED", "correct": true},
+      {"id": "c", "text": "VALUE_NEGATABLE", "correct": true},
+      {"id": "d", "text": "VALUE_BOOLEAN", "correct": false}
+    ],
+    "explanation": "InputOption supports VALUE_NONE, VALUE_REQUIRED, VALUE_OPTIONAL, VALUE_IS_ARRAY and VALUE_NEGATABLE (allowing --flag and --no-flag). VALUE_BOOLEAN does not exist — use VALUE_NEGATABLE for true/false flags.",
+    "doc_url": "https://symfony.com/doc/current/console/input.html"
+  },
+  {
+    "id": "console-010",
+    "type": "single",
+    "question": "Which class do you use to functionally test a console command in PHPUnit?",
+    "answers": [
+      {"id": "a", "text": "Symfony\\Component\\Console\\Tester\\CommandTester", "correct": true},
+      {"id": "b", "text": "Symfony\\Bundle\\FrameworkBundle\\Test\\CommandTestCase", "correct": false},
+      {"id": "c", "text": "PHPUnit\\Framework\\ConsoleTestCase", "correct": false},
+      {"id": "d", "text": "Symfony\\Component\\Console\\Tester\\OutputTester", "correct": false}
+    ],
+    "explanation": "CommandTester executes a command and exposes assertions on its output and exit code: $tester->execute(['name' => 'Alice']); $tester->assertCommandIsSuccessful(); $this->assertStringContainsString('Hello', $tester->getDisplay()).",
+    "doc_url": "https://symfony.com/doc/current/console.html#testing-commands"
+  },
+  {
+    "id": "console-011",
+    "type": "single",
+    "question": "What is the role of the configure() method on a console command (when not using attributes)?",
+    "answers": [
+      {"id": "a", "text": "It declares the command's name, description, arguments and options", "correct": true},
+      {"id": "b", "text": "It runs once at boot to wire dependencies", "correct": false},
+      {"id": "c", "text": "It is invoked just before execute() to prepare the input", "correct": false},
+      {"id": "d", "text": "It contains the command's main logic", "correct": false}
+    ],
+    "explanation": "configure() is called when the command is registered. You typically call setName(), setDescription(), addArgument() and addOption() in it. The main logic lives in execute().",
+    "doc_url": "https://symfony.com/doc/current/console.html"
+  },
+  {
+    "id": "console-012",
+    "type": "boolean",
+    "question": "The interact() method, if defined, runs between initialize() and execute() and lets a command prompt the user for missing inputs.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Lifecycle order: initialize() → interact() → execute(). interact() is the right place to ask for missing required inputs (using SymfonyStyle::ask() or QuestionHelper) so execute() can rely on a fully populated input.",
+    "doc_url": "https://symfony.com/doc/current/console.html"
+  },
+  {
+    "id": "console-013",
+    "type": "single",
+    "question": "What does SymfonyStyle::ask('Name?', 'Alice') return when the command runs in non-interactive mode (--no-interaction)?",
+    "answers": [
+      {"id": "a", "text": "The default value 'Alice' (no prompt is shown)", "correct": true},
+      {"id": "b", "text": "Null, regardless of the default", "correct": false},
+      {"id": "c", "text": "It throws because no input is available", "correct": false},
+      {"id": "d", "text": "It blocks until a value is provided via stdin", "correct": false}
+    ],
+    "explanation": "In non-interactive mode (e.g. CI), Symfony returns the default value without prompting. If no default is provided, the question may throw RuntimeException for required inputs — design questions to always have safe defaults.",
+    "doc_url": "https://symfony.com/doc/current/console/style.html"
+  },
+  {
+    "id": "console-014",
+    "type": "multiple",
+    "question": "Which console events are dispatched during a command's lifecycle? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "ConsoleEvents::COMMAND", "correct": true},
+      {"id": "b", "text": "ConsoleEvents::ERROR", "correct": true},
+      {"id": "c", "text": "ConsoleEvents::TERMINATE", "correct": true},
+      {"id": "d", "text": "ConsoleEvents::BOOT", "correct": false}
+    ],
+    "explanation": "The console component dispatches COMMAND (before execution), ERROR (when an exception is thrown), TERMINATE (after execution) and SIGNAL (when a signal is received). There is no BOOT event.",
+    "doc_url": "https://symfony.com/doc/current/components/console/events.html"
+  },
+  {
+    "id": "console-015",
+    "type": "single",
+    "question": "What is the meaning of the inline tag <info>OK</info> in a console output?",
+    "answers": [
+      {"id": "a", "text": "It applies the named output style 'info' (typically green text)", "correct": true},
+      {"id": "b", "text": "It marks the message as informational and hides it in production", "correct": false},
+      {"id": "c", "text": "It logs the message to the application logger", "correct": false},
+      {"id": "d", "text": "It prefixes the message with [INFO]", "correct": false}
+    ],
+    "explanation": "Console formatters use XML-like tags to apply styles. Built-in styles include <info>, <comment>, <question>, <error>. You can register custom ones or use inline syntax: <fg=red;bg=cyan;options=bold>...</> .",
+    "doc_url": "https://symfony.com/doc/current/console/coloring.html"
+  },
+  {
+    "id": "console-016",
+    "type": "single",
+    "question": "Which method of SymfonyStyle renders a tabular display from rows of data?",
+    "answers": [
+      {"id": "a", "text": "table(headers, rows)", "correct": true},
+      {"id": "b", "text": "grid(headers, rows)", "correct": false},
+      {"id": "c", "text": "matrix(rows)", "correct": false},
+      {"id": "d", "text": "renderTable(rows)", "correct": false}
+    ],
+    "explanation": "SymfonyStyle::table(['Name', 'Age'], [['Alice', 30], ['Bob', 25]]) prints a formatted table. For more advanced needs (custom separators, column merging), use the Table helper directly.",
+    "doc_url": "https://symfony.com/doc/current/console/style.html"
+  },
+  {
+    "id": "console-017",
+    "type": "single",
+    "question": "Which interface is implemented by ConsoleOutput to allow it to clear or overwrite parts of the screen via 'sections'?",
+    "answers": [
+      {"id": "a", "text": "ConsoleOutputInterface — its section() method returns a ConsoleSectionOutput", "correct": true},
+      {"id": "b", "text": "OutputInterface — section() works on any output", "correct": false},
+      {"id": "c", "text": "RewriteableOutputInterface", "correct": false},
+      {"id": "d", "text": "TerminalAwareInterface", "correct": false}
+    ],
+    "explanation": "ConsoleOutput::section() yields independent ConsoleSectionOutput objects that can be cleared and rewritten in place. This is what powers multiple progress bars side by side and live UI updates in commands.",
+    "doc_url": "https://symfony.com/doc/current/console/coloring.html"
+  },
+  {
+    "id": "console-018",
+    "type": "single",
+    "question": "How do you make a service-style command lazy so it isn't instantiated until invoked?",
+    "answers": [
+      {"id": "a", "text": "Use the #[AsCommand] attribute — Symfony auto-registers commands lazily by default", "correct": true},
+      {"id": "b", "text": "Set lazy: true on the service definition only", "correct": false},
+      {"id": "c", "text": "Inject ContainerInterface and resolve the command on demand", "correct": false},
+      {"id": "d", "text": "Lazy commands are not supported", "correct": false}
+    ],
+    "explanation": "When a class is registered with #[AsCommand], Symfony stores its name and description in the application's command map and only instantiates it when actually run. You can still combine with lazy: true for the service itself.",
+    "doc_url": "https://symfony.com/doc/current/console/lazy_commands.html"
+  },
+  {
+    "id": "console-019",
+    "type": "boolean",
+    "question": "Symfony commands can subscribe to OS signals (e.g. SIGINT) by implementing SignalableCommandInterface to gracefully react to interruptions.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "SignalableCommandInterface declares getSubscribedSignals() and handleSignal($signal). When a subscribed signal is received, Symfony dispatches ConsoleEvents::SIGNAL and calls handleSignal(), giving you a chance to clean up before exiting.",
+    "doc_url": "https://symfony.com/doc/current/console.html#signal-handling"
+  },
+  {
+    "id": "console-020",
+    "type": "single",
+    "question": "Which class lets you capture the output of a command (e.g. when running it from a controller) into a string?",
+    "answers": [
+      {"id": "a", "text": "BufferedOutput — call $output->fetch() to retrieve the buffered text", "correct": true},
+      {"id": "b", "text": "MemoryOutput — call $output->dump()", "correct": false},
+      {"id": "c", "text": "StringOutput — call $output->toString()", "correct": false},
+      {"id": "d", "text": "PipedOutput — call $output->pipe()", "correct": false}
+    ],
+    "explanation": "BufferedOutput collects everything written to it. fetch() returns the accumulated text and clears the buffer. NullOutput discards everything; ConsoleOutput writes to STDOUT/STDERR.",
+    "doc_url": "https://symfony.com/doc/current/console/command_in_controller.html"
+  },
+  {
+    "id": "console-021",
+    "type": "single",
+    "question": "How do you call a Symfony console command from inside another command using its Application instance?",
+    "answers": [
+      {"id": "a", "text": "$this->getApplication()->find('app:other')->run(new ArrayInput([...]), $output)", "correct": true},
+      {"id": "b", "text": "$this->callCommand('app:other')", "correct": false},
+      {"id": "c", "text": "shell_exec('php bin/console app:other')", "correct": false},
+      {"id": "d", "text": "exec('app:other')", "correct": false}
+    ],
+    "explanation": "Use the parent application's command registry: getApplication()->find() returns the Command, which can be run with an ArrayInput. Avoid shell_exec/exec — they spawn a new PHP process and lose context.",
+    "doc_url": "https://symfony.com/doc/current/console/calling_commands.html"
+  },
+  {
+    "id": "console-022",
+    "type": "multiple",
+    "question": "Which methods does SymfonyStyle expose to display semantic notices? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "success()", "correct": true},
+      {"id": "b", "text": "warning()", "correct": true},
+      {"id": "c", "text": "note()", "correct": true},
+      {"id": "d", "text": "debug()", "correct": false}
+    ],
+    "explanation": "SymfonyStyle provides title, section, text, listing, table, success, error, warning, info, note, caution, ask, askHidden, choice, confirm and progress helpers. There is no debug() — use $output->isDebug() to gate verbose-only writes.",
+    "doc_url": "https://symfony.com/doc/current/console/style.html"
+  },
+  {
+    "id": "console-023",
+    "type": "single",
+    "question": "What does the ChoiceQuestion::setMultiselect(true) option allow?",
+    "answers": [
+      {"id": "a", "text": "The user can select multiple values (e.g. 0,2,3) instead of just one", "correct": true},
+      {"id": "b", "text": "The same question is asked multiple times in a row", "correct": false},
+      {"id": "c", "text": "The user can pick from multiple separate questions", "correct": false},
+      {"id": "d", "text": "It enables free-text input alongside choices", "correct": false}
+    ],
+    "explanation": "Multiselect lets users answer with a comma-separated list of indices/labels, and the helper returns an array of selected values. SymfonyStyle::choice() accepts an extra parameter to enable this.",
+    "doc_url": "https://symfony.com/doc/current/components/console/helpers/question_helper.html"
+  },
+  {
+    "id": "console-024",
+    "type": "boolean",
+    "question": "Returning Command::FAILURE (1) from execute() causes the command to exit with code 1, which can be used by shell scripts and CI to detect failure.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Symfony uses the int returned by execute() as the process exit code. SUCCESS=0, FAILURE=1, INVALID=2. Use these in CI to fail builds when commands fail (e.g. doctrine:migrations:status returning non-zero).",
+    "doc_url": "https://symfony.com/doc/current/console.html"
+  },
+  {
+    "id": "console-025",
+    "type": "single",
+    "question": "Which option globally disables interactive prompts for a console command (e.g. for CI)?",
+    "answers": [
+      {"id": "a", "text": "--no-interaction (or -n)", "correct": true},
+      {"id": "b", "text": "--quiet (or -q)", "correct": false},
+      {"id": "c", "text": "--silent", "correct": false},
+      {"id": "d", "text": "--non-interactive", "correct": false}
+    ],
+    "explanation": "--no-interaction (-n) is a global Symfony Console option. Question helpers detect it and return defaults instead of prompting. --quiet only silences output. --silent disables both output and the auto-exit behaviour.",
+    "doc_url": "https://symfony.com/doc/current/console.html"
   }
 ]

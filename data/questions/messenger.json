@@ -48,5 +48,270 @@
     ],
     "explanation": "Built-in transports include AMQP, Redis, Doctrine, and In-memory. Kafka requires a third-party package. The in-memory transport is for testing.",
     "doc_url": "https://symfony.com/doc/current/messenger.html#transport-configuration"
+  },
+  {
+    "id": "messenger-005",
+    "type": "single",
+    "question": "What does $bus->dispatch($message) return?",
+    "answers": [
+      {"id": "a", "text": "An Envelope wrapping the message and any stamps added by middleware/handlers", "correct": true},
+      {"id": "b", "text": "True if the message was handled, false otherwise", "correct": false},
+      {"id": "c", "text": "The handler's return value directly", "correct": false},
+      {"id": "d", "text": "Nothing — dispatch is fire-and-forget", "correct": false}
+    ],
+    "explanation": "dispatch() always returns an Envelope. To read a synchronous handler's result, fetch the HandledStamp: $envelope->last(HandledStamp::class)?->getResult(). For async messages, no result is available until the worker processes it.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-006",
+    "type": "single",
+    "question": "Which stamp delays the dispatch of a message by a given number of milliseconds?",
+    "answers": [
+      {"id": "a", "text": "DelayStamp", "correct": true},
+      {"id": "b", "text": "ScheduleStamp", "correct": false},
+      {"id": "c", "text": "WaitStamp", "correct": false},
+      {"id": "d", "text": "DeferredStamp", "correct": false}
+    ],
+    "explanation": "DelayStamp instructs the transport (when supported, e.g. AMQP, Doctrine, Redis) to delay delivery of the message. Useful to throttle work or to retry with a backoff.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-007",
+    "type": "boolean",
+    "question": "If no transport is configured for a message, Symfony Messenger handles it synchronously in the same request.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Routing is optional. Without an entry in framework.messenger.routing for a message class, the handler is invoked immediately during dispatch — useful for command/query buses where async is unwanted.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-008",
+    "type": "multiple",
+    "question": "Which messenger:consume options help prevent long-running workers from leaking memory? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "--limit=N (process N messages then exit)", "correct": true},
+      {"id": "b", "text": "--time-limit=SECONDS (exit after that time)", "correct": true},
+      {"id": "c", "text": "--memory-limit=128M (exit when memory exceeded)", "correct": true},
+      {"id": "d", "text": "--gc-collect (force PHP garbage collection)", "correct": false}
+    ],
+    "explanation": "The recommended pattern is to combine --limit, --time-limit and --memory-limit so the worker exits cleanly and is restarted by a supervisor (systemd, supervisord). There is no --gc-collect option.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#deploying-to-production"
+  },
+  {
+    "id": "messenger-009",
+    "type": "single",
+    "question": "What is the role of the failure_transport setting in Messenger?",
+    "answers": [
+      {"id": "a", "text": "It receives messages that have exhausted their retry attempts so they can be inspected and retried later", "correct": true},
+      {"id": "b", "text": "It stores the messages currently being retried", "correct": false},
+      {"id": "c", "text": "It logs every dispatch failure to a file", "correct": false},
+      {"id": "d", "text": "It disables retries entirely", "correct": false}
+    ],
+    "explanation": "When a message fails permanently, it is moved to the failure transport instead of being lost. Use messenger:failed:show, messenger:failed:retry and messenger:failed:remove to manage the dead-letter queue.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#saving-and-handling-failed-messages"
+  },
+  {
+    "id": "messenger-010",
+    "type": "single",
+    "question": "Which exception interface tells Messenger NOT to retry a message and send it directly to the failure transport?",
+    "answers": [
+      {"id": "a", "text": "UnrecoverableExceptionInterface", "correct": true},
+      {"id": "b", "text": "FatalExceptionInterface", "correct": false},
+      {"id": "c", "text": "RecoverableExceptionInterface", "correct": false},
+      {"id": "d", "text": "PermanentFailureInterface", "correct": false}
+    ],
+    "explanation": "Throwing an exception that implements UnrecoverableExceptionInterface (or its base class UnrecoverableMessageHandlingException) skips the retry strategy. RecoverableExceptionInterface does the opposite — forces a retry regardless of max_retries.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-011",
+    "type": "single",
+    "question": "What is the purpose of the doctrine_transaction middleware on a Messenger bus?",
+    "answers": [
+      {"id": "a", "text": "It wraps the handler execution in a Doctrine transaction, rolling back on exception", "correct": true},
+      {"id": "b", "text": "It serializes messages using Doctrine's Type system", "correct": false},
+      {"id": "c", "text": "It guarantees the Doctrine connection is alive before handling", "correct": false},
+      {"id": "d", "text": "It commits all bus dispatches in a single transaction", "correct": false}
+    ],
+    "explanation": "doctrine_transaction wraps each handler in begin/commit/rollback, providing atomicity for the work it performs. doctrine_ping_connection refreshes the connection (useful in long-running workers); doctrine_close_connection closes after handling.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#middleware"
+  },
+  {
+    "id": "messenger-012",
+    "type": "multiple",
+    "question": "Which Worker events are dispatched by Messenger? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "WorkerStartedEvent", "correct": true},
+      {"id": "b", "text": "WorkerMessageReceivedEvent", "correct": true},
+      {"id": "c", "text": "WorkerMessageFailedEvent", "correct": true},
+      {"id": "d", "text": "WorkerCrashedEvent", "correct": false}
+    ],
+    "explanation": "Worker events include Started, Stopped, MessageReceived, MessageHandled, MessageFailed, MessageRetried, RunningEvent. There is no WorkerCrashedEvent — uncaught exceptions in handlers fire MessageFailedEvent.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-013",
+    "type": "boolean",
+    "question": "Multiple message buses (e.g. command.bus, query.bus, event.bus) are supported in Symfony Messenger and can have different middleware stacks.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "framework.messenger.buses lets you declare several buses, each with its own middleware. This enables a clean CQRS-like separation: command bus with validation+transaction, query bus without side-effect middleware, etc.",
+    "doc_url": "https://symfony.com/doc/current/messenger/multiple_buses.html"
+  },
+  {
+    "id": "messenger-014",
+    "type": "single",
+    "question": "Which command initializes the storage backend (table, queue, exchange) of a transport?",
+    "answers": [
+      {"id": "a", "text": "php bin/console messenger:setup-transports", "correct": true},
+      {"id": "b", "text": "php bin/console messenger:init-transports", "correct": false},
+      {"id": "c", "text": "php bin/console messenger:install", "correct": false},
+      {"id": "d", "text": "php bin/console messenger:transport:create", "correct": false}
+    ],
+    "explanation": "messenger:setup-transports prepares the underlying storage (creates the messenger_messages table for Doctrine, declares queues/exchanges for AMQP, etc.). Useful when auto_setup is disabled in production.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-015",
+    "type": "single",
+    "question": "How do you retrieve the result of a synchronously-handled command from the dispatched Envelope?",
+    "answers": [
+      {"id": "a", "text": "$envelope->last(HandledStamp::class)?->getResult()", "correct": true},
+      {"id": "b", "text": "$envelope->getResult()", "correct": false},
+      {"id": "c", "text": "$envelope->getReturnValue()", "correct": false},
+      {"id": "d", "text": "$bus->getLastResult()", "correct": false}
+    ],
+    "explanation": "HandleMessageMiddleware adds a HandledStamp per handler that ran. last() returns the latest stamp of that type and getResult() returns whatever the handler returned. With multiple handlers, use all() and iterate.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-016",
+    "type": "single",
+    "question": "Which configuration option controls the maximum number of retries before a message is moved to the failure transport?",
+    "answers": [
+      {"id": "a", "text": "retry_strategy.max_retries", "correct": true},
+      {"id": "b", "text": "retry_strategy.max_attempts", "correct": false},
+      {"id": "c", "text": "retry_strategy.attempts", "correct": false},
+      {"id": "d", "text": "retry_strategy.maximum", "correct": false}
+    ],
+    "explanation": "Per-transport retry_strategy supports max_retries (default 3), delay (initial delay in ms), multiplier (exponential factor), max_delay and jitter. Once max_retries is reached, the message goes to the failure transport.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#retries-failures"
+  },
+  {
+    "id": "messenger-017",
+    "type": "boolean",
+    "question": "By default, Symfony Messenger workers reset their service container between two messages to prevent state leakage and memory growth.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "After each message, the worker calls reset() on services that implement ResetInterface (notably Doctrine, Monolog handlers). This keeps long-running workers stable. Pass --no-reset to disable, but only if you know what you're doing.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-018",
+    "type": "single",
+    "question": "Which command displays messages currently sitting in the failure transport?",
+    "answers": [
+      {"id": "a", "text": "php bin/console messenger:failed:show", "correct": true},
+      {"id": "b", "text": "php bin/console messenger:show:failed", "correct": false},
+      {"id": "c", "text": "php bin/console messenger:dlq:show", "correct": false},
+      {"id": "d", "text": "php bin/console messenger:list:failed", "correct": false}
+    ],
+    "explanation": "messenger:failed:show lists failed messages with their stamps and exception details. messenger:failed:retry attempts redelivery, messenger:failed:remove permanently discards them.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-019",
+    "type": "single",
+    "question": "What does the in-memory transport (in-memory://) do?",
+    "answers": [
+      {"id": "a", "text": "It stores messages in PHP memory for the duration of the request — primarily used in tests", "correct": true},
+      {"id": "b", "text": "It uses APCu as its persistence layer for shared memory across processes", "correct": false},
+      {"id": "c", "text": "It writes to /dev/shm for fast IPC", "correct": false},
+      {"id": "d", "text": "It is a synonym for the sync transport", "correct": false}
+    ],
+    "explanation": "in-memory keeps dispatched messages in a PHP array within the current process. It is well-suited for tests because the messages are introspectable and never leave the test boundary. WebTestCase auto-resets it between tests.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-020",
+    "type": "single",
+    "question": "Where is the Doctrine transport's queue stored by default?",
+    "answers": [
+      {"id": "a", "text": "In a 'messenger_messages' table on the configured database connection", "correct": true},
+      {"id": "b", "text": "In a separate SQLite file under var/messenger.db", "correct": false},
+      {"id": "c", "text": "In Doctrine's metadata cache directory", "correct": false},
+      {"id": "d", "text": "In Redis, since Doctrine cannot store queues natively", "correct": false}
+    ],
+    "explanation": "The Doctrine transport creates and manages a messenger_messages table on the chosen connection (default 'default'). Workers SELECT … FOR UPDATE rows to claim them, ensuring only one worker handles each message.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-021",
+    "type": "multiple",
+    "question": "Which of the following are commonly used Messenger middleware? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "validation", "correct": true},
+      {"id": "b", "text": "doctrine_transaction", "correct": true},
+      {"id": "c", "text": "router_context", "correct": true},
+      {"id": "d", "text": "csrf_protection", "correct": false}
+    ],
+    "explanation": "Messenger ships with validation, doctrine_transaction, doctrine_ping_connection, doctrine_close_connection, router_context, send_message, handle_message, etc. CSRF is an HTTP concern handled at the form/security level, not on the bus.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#middleware"
+  },
+  {
+    "id": "messenger-022",
+    "type": "single",
+    "question": "What does the DispatchAfterCurrentBusMiddleware allow?",
+    "answers": [
+      {"id": "a", "text": "It postpones the dispatch of nested messages until the current handler has finished successfully", "correct": true},
+      {"id": "b", "text": "It dispatches every message after the response has been sent", "correct": false},
+      {"id": "c", "text": "It re-dispatches messages on the next bus in a chain", "correct": false},
+      {"id": "d", "text": "It catches exceptions from prior handlers", "correct": false}
+    ],
+    "explanation": "When a handler dispatches its own messages with DispatchAfterCurrentBusStamp, those messages are queued until the outer handler finishes (and any DB transaction commits). Useful to avoid sending notifications about state that was rolled back.",
+    "doc_url": "https://symfony.com/doc/current/messenger/dispatch_after_current_bus.html"
+  },
+  {
+    "id": "messenger-023",
+    "type": "single",
+    "question": "Which Symfony component (introduced in 6.3) lets you define recurring messages, like cron jobs powered by Messenger?",
+    "answers": [
+      {"id": "a", "text": "The Scheduler component", "correct": true},
+      {"id": "b", "text": "The Cron component", "correct": false},
+      {"id": "c", "text": "The Recurring component", "correct": false},
+      {"id": "d", "text": "The Heartbeat component", "correct": false}
+    ],
+    "explanation": "Symfony Scheduler lets you describe recurring tasks (every X minutes, cron expressions) that produce messages dispatched through Messenger. The worker pulls them just like regular async messages.",
+    "doc_url": "https://symfony.com/doc/current/scheduler.html"
+  },
+  {
+    "id": "messenger-024",
+    "type": "boolean",
+    "question": "A handler class can use #[AsMessageHandler] on multiple methods, allowing one class to handle several different message types.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "When applied at method level, #[AsMessageHandler] turns each annotated method into an independent handler. This lets you group related handlers in a single class while still binding each to its specific message type.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
+  },
+  {
+    "id": "messenger-025",
+    "type": "single",
+    "question": "How do you make a service receive only messages coming from a specific transport, e.g. 'async'?",
+    "answers": [
+      {"id": "a", "text": "Pass the option fromTransport: 'async' to #[AsMessageHandler]", "correct": true},
+      {"id": "b", "text": "Inject the transport service and check it manually", "correct": false},
+      {"id": "c", "text": "Configure framework.messenger.handlers with a 'from' option", "correct": false},
+      {"id": "d", "text": "Add a TransportRestrictionStamp at dispatch time", "correct": false}
+    ],
+    "explanation": "#[AsMessageHandler(fromTransport: 'async')] tells Messenger to invoke the handler only when the message was received from the named transport. Without that option, the handler runs whenever its message type is dispatched, sync or async.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html"
   }
 ]

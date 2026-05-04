@@ -48,5 +48,272 @@
     ],
     "explanation": "Symfony has built-in authenticators for form login and HTTP basic auth. Custom authenticators implement AuthenticatorInterface. JWT support requires a third-party bundle like lexik/jwt-authentication-bundle.",
     "doc_url": "https://symfony.com/doc/current/security/custom_authenticator.html"
+  },
+  {
+    "id": "security-005",
+    "type": "single",
+    "question": "Which method must a class implementing UserInterface return to identify the user (e.g. for re-loading from a provider)?",
+    "answers": [
+      {"id": "a", "text": "getUserIdentifier()", "correct": true},
+      {"id": "b", "text": "getUsername()", "correct": false},
+      {"id": "c", "text": "getId()", "correct": false},
+      {"id": "d", "text": "getLogin()", "correct": false}
+    ],
+    "explanation": "Since Symfony 5.3, getUserIdentifier() replaced getUsername(). It returns a unique string (email, login, etc.) that is used to refresh the user via the user provider.",
+    "doc_url": "https://symfony.com/doc/current/security.html#the-user"
+  },
+  {
+    "id": "security-006",
+    "type": "single",
+    "question": "What is the purpose of the password hasher 'auto' algorithm in security.yaml?",
+    "answers": [
+      {"id": "a", "text": "It picks the strongest hashing algorithm available on the system (e.g. argon2id, sodium, bcrypt)", "correct": true},
+      {"id": "b", "text": "It disables password hashing entirely", "correct": false},
+      {"id": "c", "text": "It generates a unique algorithm per user", "correct": false},
+      {"id": "d", "text": "It uses md5 for backward compatibility", "correct": false}
+    ],
+    "explanation": "'auto' lets Symfony choose the best hasher available at runtime (with PASSWORD_DEFAULT under the hood). This makes future migrations easier — users get rehashed automatically when a stronger algorithm becomes available.",
+    "doc_url": "https://symfony.com/doc/current/security/passwords.html"
+  },
+  {
+    "id": "security-007",
+    "type": "boolean",
+    "question": "Symfony's user provider is responsible for *loading* the user; authentication itself is handled by the authenticator.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "User providers (entity, ldap, in_memory, chain, custom) are pure user lookup. Authenticators verify credentials and produce the security token. This separation lets you reuse one provider with several authenticators.",
+    "doc_url": "https://symfony.com/doc/current/security/user_providers.html"
+  },
+  {
+    "id": "security-008",
+    "type": "multiple",
+    "question": "Which of the following are built-in user provider types in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "entity", "correct": true},
+      {"id": "b", "text": "memory", "correct": true},
+      {"id": "c", "text": "chain", "correct": true},
+      {"id": "d", "text": "redis", "correct": false}
+    ],
+    "explanation": "Symfony ships entity (Doctrine), memory (in-memory list, dev/test only), chain (composes several providers) and ldap (with the LDAP component). Redis is not a built-in provider — implement UserProviderInterface to back it manually.",
+    "doc_url": "https://symfony.com/doc/current/security/user_providers.html"
+  },
+  {
+    "id": "security-009",
+    "type": "single",
+    "question": "What does a Voter need to implement to make access decisions?",
+    "answers": [
+      {"id": "a", "text": "supports(attribute, subject) and voteOnAttribute(attribute, subject, token) — both abstract methods of the Voter base class", "correct": true},
+      {"id": "b", "text": "isGranted(attribute, subject) only", "correct": false},
+      {"id": "c", "text": "VoterInterface::vote() — the base class is no longer used in Symfony 7+", "correct": false},
+      {"id": "d", "text": "Nothing — voters are auto-generated from controller annotations", "correct": false}
+    ],
+    "explanation": "Extending the Voter base class lets you implement supports() (does this voter handle this attribute/subject?) and voteOnAttribute() (granted or denied?). Implementing CacheableVoterInterface (supportsAttribute/supportsType) further optimizes performance.",
+    "doc_url": "https://symfony.com/doc/current/security/voters.html"
+  },
+  {
+    "id": "security-010",
+    "type": "single",
+    "question": "Which special role/attribute always grants access in #[IsGranted] checks, regardless of authentication state?",
+    "answers": [
+      {"id": "a", "text": "PUBLIC_ACCESS", "correct": true},
+      {"id": "b", "text": "ROLE_USER", "correct": false},
+      {"id": "c", "text": "IS_AUTHENTICATED_ANONYMOUSLY", "correct": false},
+      {"id": "d", "text": "ROLE_GUEST", "correct": false}
+    ],
+    "explanation": "PUBLIC_ACCESS is granted to everyone, even anonymous users. It is typically used in access_control rules to whitelist routes that must remain reachable without authentication.",
+    "doc_url": "https://symfony.com/doc/current/security.html"
+  },
+  {
+    "id": "security-011",
+    "type": "single",
+    "question": "What is the role of the entry_point on a firewall?",
+    "answers": [
+      {"id": "a", "text": "It decides what to do (e.g. redirect to /login, or return 401) when an unauthenticated user accesses a protected resource", "correct": true},
+      {"id": "b", "text": "It defines the URL where the firewall starts matching", "correct": false},
+      {"id": "c", "text": "It is a synonym for access_control", "correct": false},
+      {"id": "d", "text": "It registers a new authenticator at runtime", "correct": false}
+    ],
+    "explanation": "When several authenticators are registered, Symfony cannot guess which one should respond to an unauthenticated request. entry_point points to the authenticator (or service) responsible for starting the auth flow.",
+    "doc_url": "https://symfony.com/doc/current/security/custom_authenticator.html"
+  },
+  {
+    "id": "security-012",
+    "type": "boolean",
+    "question": "Setting 'lazy: true' on a firewall delays the user/session loading until $request->getUser() (or similar) is actually invoked, which improves performance for cacheable pages.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Lazy firewalls only start the session and load the user when the application reads the user. This keeps the response cacheable by shared caches as long as the controller doesn't touch the user — significantly faster for public pages.",
+    "doc_url": "https://symfony.com/doc/current/security.html"
+  },
+  {
+    "id": "security-013",
+    "type": "single",
+    "question": "Which firewall feature limits brute-force login attempts based on IP and/or username?",
+    "answers": [
+      {"id": "a", "text": "login_throttling", "correct": true},
+      {"id": "b", "text": "rate_limit", "correct": false},
+      {"id": "c", "text": "anti_brute_force", "correct": false},
+      {"id": "d", "text": "login_guard", "correct": false}
+    ],
+    "explanation": "login_throttling: { max_attempts: 5 } activates a built-in rate limiter on the login form/json/http_basic. It uses the RateLimiter component under the hood and exposes max_attempts and interval as options.",
+    "doc_url": "https://symfony.com/doc/current/security.html#login-throttling"
+  },
+  {
+    "id": "security-014",
+    "type": "multiple",
+    "question": "Which of the following are valid badges that can be added to a Passport in a custom authenticator? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "UserBadge", "correct": true},
+      {"id": "b", "text": "PasswordCredentials", "correct": true},
+      {"id": "c", "text": "RememberMeBadge", "correct": true},
+      {"id": "d", "text": "TwoFactorBadge", "correct": false}
+    ],
+    "explanation": "Symfony provides UserBadge, PasswordCredentials, CustomCredentials, RememberMeBadge, CsrfTokenBadge, PreAuthenticatedUserBadge. Two-factor authentication is handled by third-party bundles (e.g. scheb/2fa-bundle), not the core.",
+    "doc_url": "https://symfony.com/doc/current/security/custom_authenticator.html"
+  },
+  {
+    "id": "security-015",
+    "type": "single",
+    "question": "What does the PasswordUpgraderInterface allow?",
+    "answers": [
+      {"id": "a", "text": "Re-hashing the user's password automatically with a stronger algorithm during a successful login", "correct": true},
+      {"id": "b", "text": "Forcing users to change their password at next login", "correct": false},
+      {"id": "c", "text": "Enabling/disabling password authentication per user", "correct": false},
+      {"id": "d", "text": "Encrypting passwords with the firewall's secret", "correct": false}
+    ],
+    "explanation": "When a user provider implements PasswordUpgraderInterface, Symfony calls upgradePassword() after a successful login if the existing hash needs upgrading (per migrate_from). Users transparently move to the better algorithm.",
+    "doc_url": "https://symfony.com/doc/current/security/passwords.html#password-migration"
+  },
+  {
+    "id": "security-016",
+    "type": "single",
+    "question": "How does $this->denyAccessUnlessGranted('edit', $post) work in a controller?",
+    "answers": [
+      {"id": "a", "text": "It calls the AuthorizationChecker, which polls voters; if no voter grants access, an AccessDeniedException is thrown", "correct": true},
+      {"id": "b", "text": "It directly throws an AccessDeniedException without any voter logic", "correct": false},
+      {"id": "c", "text": "It grants access only if the user has a role named exactly 'edit'", "correct": false},
+      {"id": "d", "text": "It always returns false in dev mode and true in prod", "correct": false}
+    ],
+    "explanation": "The check delegates to the AuthorizationChecker. Voters that support the 'edit' attribute and the Post subject vote, and the access decision strategy (affirmative by default) decides. On denial, an AccessDeniedException is thrown.",
+    "doc_url": "https://symfony.com/doc/current/security.html"
+  },
+  {
+    "id": "security-017",
+    "type": "single",
+    "question": "What does the firewall option 'switch_user: true' enable?",
+    "answers": [
+      {"id": "a", "text": "User impersonation: an authorized user can act as another user via ?_switch_user=username", "correct": true},
+      {"id": "b", "text": "It allows users to change their identity via the security token", "correct": false},
+      {"id": "c", "text": "It rotates user identifiers periodically", "correct": false},
+      {"id": "d", "text": "It re-authenticates the current user on every request", "correct": false}
+    ],
+    "explanation": "switch_user enables the impersonation feature. Adding ?_switch_user=alice (or a custom parameter) makes the request behave as if Alice were logged in. Requires ROLE_ALLOWED_TO_SWITCH (or a custom role).",
+    "doc_url": "https://symfony.com/doc/current/security/impersonating_user.html"
+  },
+  {
+    "id": "security-018",
+    "type": "boolean",
+    "question": "The order of firewalls in security.yaml matters: only the first matching firewall (by pattern) is applied to a given request.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Only one firewall handles a request — the first whose pattern (regex) matches. That's why a catch-all like 'main:' typically goes last and stricter API/dev firewalls precede it.",
+    "doc_url": "https://symfony.com/doc/current/security.html#firewalls"
+  },
+  {
+    "id": "security-019",
+    "type": "single",
+    "question": "Which authenticator is intended for stateless API authentication using bearer tokens?",
+    "answers": [
+      {"id": "a", "text": "access_token (with a custom AccessTokenHandlerInterface)", "correct": true},
+      {"id": "b", "text": "form_login", "correct": false},
+      {"id": "c", "text": "remember_me", "correct": false},
+      {"id": "d", "text": "x509", "correct": false}
+    ],
+    "explanation": "The 'access_token' authenticator extracts a bearer token from the request and delegates validation to an AccessTokenHandlerInterface implementation, which returns a UserBadge. It is stateless and well-suited for APIs.",
+    "doc_url": "https://symfony.com/doc/current/security/access_token.html"
+  },
+  {
+    "id": "security-020",
+    "type": "single",
+    "question": "What does role_hierarchy: { ROLE_ADMIN: ROLE_USER } in security.yaml accomplish?",
+    "answers": [
+      {"id": "a", "text": "Any user with ROLE_ADMIN is also considered to have ROLE_USER", "correct": true},
+      {"id": "b", "text": "ROLE_USER is renamed to ROLE_ADMIN", "correct": false},
+      {"id": "c", "text": "ROLE_USER becomes a parent role of ROLE_ADMIN", "correct": false},
+      {"id": "d", "text": "Only users with ROLE_USER can promote to ROLE_ADMIN", "correct": false}
+    ],
+    "explanation": "Role hierarchy lets a higher role transparently include lower ones. Without it, roles are independent. The mapping is one-way: ROLE_ADMIN owns ROLE_USER's permissions, but not the other way around.",
+    "doc_url": "https://symfony.com/doc/current/security.html#hierarchical-roles"
+  },
+  {
+    "id": "security-021",
+    "type": "single",
+    "question": "Which exception should you throw to deny access from anywhere in the stack?",
+    "answers": [
+      {"id": "a", "text": "AccessDeniedException (Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException)", "correct": true},
+      {"id": "b", "text": "ForbiddenException", "correct": false},
+      {"id": "c", "text": "HttpException with status 403", "correct": false},
+      {"id": "d", "text": "AuthenticationException", "correct": false}
+    ],
+    "explanation": "AccessDeniedException is the conventional way to signal an authorization failure. The firewall converts it into a 403 (or 401 with a redirect to login if the user is anonymous), and access denied handlers can intercept it.",
+    "doc_url": "https://symfony.com/doc/current/security.html"
+  },
+  {
+    "id": "security-022",
+    "type": "multiple",
+    "question": "Which of these access_control matchers can be used to apply a rule to specific requests? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "path (regex)", "correct": true},
+      {"id": "b", "text": "ips", "correct": true},
+      {"id": "c", "text": "host", "correct": true},
+      {"id": "d", "text": "user_agent", "correct": false}
+    ],
+    "explanation": "Each access_control entry matches on path (regex), host, ips, methods, route, port, attributes, and a possible expression. user_agent is not a built-in matcher — wrap it in an expression if needed.",
+    "doc_url": "https://symfony.com/doc/current/security/access_control.html"
+  },
+  {
+    "id": "security-023",
+    "type": "single",
+    "question": "What does the RememberMeBadge enable when added to a Passport?",
+    "answers": [
+      {"id": "a", "text": "It signals to Symfony to issue a 'remember me' cookie so the user stays logged in across sessions", "correct": true},
+      {"id": "b", "text": "It prevents the user from being logged out for one hour", "correct": false},
+      {"id": "c", "text": "It encrypts the user's session in the database", "correct": false},
+      {"id": "d", "text": "It locks the account if the user is inactive too long", "correct": false}
+    ],
+    "explanation": "Adding a RememberMeBadge to the Passport (typically when a 'remember me' checkbox is ticked) tells Symfony to set a remember-me cookie. The remember_me firewall option must be enabled.",
+    "doc_url": "https://symfony.com/doc/current/security/remember_me.html"
+  },
+  {
+    "id": "security-024",
+    "type": "single",
+    "question": "Which expression-language function can be used inside #[IsGranted] or access_control expressions to check whether the user is fully (not just remembered) authenticated?",
+    "answers": [
+      {"id": "a", "text": "is_fully_authenticated()", "correct": true},
+      {"id": "b", "text": "is_authenticated_fully()", "correct": false},
+      {"id": "c", "text": "isAuthenticated('full')", "correct": false},
+      {"id": "d", "text": "is_logged_in()", "correct": false}
+    ],
+    "explanation": "Security expressions expose is_authenticated(), is_fully_authenticated(), is_remember_me(), is_granted(role[, object]), and the variables user, token, role_names, object, request. is_fully_authenticated() returns true only after a non-remember-me login.",
+    "doc_url": "https://symfony.com/doc/current/security/expressions.html"
+  },
+  {
+    "id": "security-025",
+    "type": "single",
+    "question": "Which interface must be implemented to back a stateless API token validator used by the 'access_token' authenticator?",
+    "answers": [
+      {"id": "a", "text": "AccessTokenHandlerInterface", "correct": true},
+      {"id": "b", "text": "TokenValidatorInterface", "correct": false},
+      {"id": "c", "text": "ApiTokenInterface", "correct": false},
+      {"id": "d", "text": "BearerTokenHandlerInterface", "correct": false}
+    ],
+    "explanation": "AccessTokenHandlerInterface defines getUserBadgeFrom(string $accessToken): UserBadge. Symfony calls it for every incoming request that carries a bearer token; the handler is responsible for validation and turning the token into a UserBadge.",
+    "doc_url": "https://symfony.com/doc/current/security/access_token.html"
   }
 ]
