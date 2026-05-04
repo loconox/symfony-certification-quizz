@@ -1,0 +1,319 @@
+[
+  {
+    "id": "templating-001",
+    "type": "single",
+    "question": "In Twig, which tag is used to define a named block that child templates can override?",
+    "answers": [
+      {"id": "a", "text": "{% block name %}...{% endblock %}", "correct": true},
+      {"id": "b", "text": "{% section name %}...{% endsection %}", "correct": false},
+      {"id": "c", "text": "{% slot name %}...{% endslot %}", "correct": false},
+      {"id": "d", "text": "{% region name %}...{% endregion %}", "correct": false}
+    ],
+    "explanation": "Twig template inheritance uses {% block %} tags. A child template extends a parent and overrides specific blocks using the same tag.",
+    "doc_url": "https://twig.symfony.com/doc/3.x/tags/extends.html"
+  },
+  {
+    "id": "templating-002",
+    "type": "boolean",
+    "question": "In Twig, variables are auto-escaped by default to prevent XSS attacks.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Twig auto-escapes all output by default. To output raw HTML, you must explicitly use the |raw filter, being careful about XSS vulnerabilities.",
+    "doc_url": "https://twig.symfony.com/doc/3.x/filters/raw.html"
+  },
+  {
+    "id": "templating-003",
+    "type": "single",
+    "question": "Which Twig function generates a URL for a named Symfony route?",
+    "answers": [
+      {"id": "a", "text": "path('route_name', {param: value})", "correct": true},
+      {"id": "b", "text": "url_for('route_name')", "correct": false},
+      {"id": "c", "text": "route('route_name')", "correct": false},
+      {"id": "d", "text": "link_to('route_name')", "correct": false}
+    ],
+    "explanation": "path() generates a relative URL for a named route. url() generates an absolute URL including the scheme and host. Both accept an array of route parameters as second argument.",
+    "doc_url": "https://symfony.com/doc/current/templates.html#linking-to-pages"
+  },
+  {
+    "id": "templating-004",
+    "type": "multiple",
+    "question": "Which of the following are valid Twig global variables in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "app.user", "correct": true},
+      {"id": "b", "text": "app.request", "correct": true},
+      {"id": "c", "text": "app.session", "correct": true},
+      {"id": "d", "text": "app.container", "correct": false}
+    ],
+    "explanation": "The 'app' global variable in Symfony Twig templates exposes: app.user, app.request, app.session, app.flashes, app.environment, app.debug. The container is not exposed for security reasons.",
+    "doc_url": "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+  },
+  {
+    "id": "templating-005",
+    "type": "single",
+    "question": "When you write {{ post.title }}, in which order does Twig look up 'title' on the variable 'post'?",
+    "answers": [
+      {"id": "a", "text": "post['title'], post->title, post->title(), post->getTitle(), post->isTitle(), post->hasTitle()", "correct": true},
+      {"id": "b", "text": "post->getTitle() only — Twig requires a getter", "correct": false},
+      {"id": "c", "text": "post->title only — Twig requires a public property", "correct": false},
+      {"id": "d", "text": "post->__get('title') only — Twig uses magic methods", "correct": false}
+    ],
+    "explanation": "Twig tries each access pattern in turn until one matches: array offset, public property, method call with the same name, then getter/isser/hasser. This is why {{ post.title }} works whether the property is public or accessible via a getter.",
+    "doc_url": "https://twig.symfony.com/doc/3.x/templates.html"
+  },
+  {
+    "id": "templating-006",
+    "type": "single",
+    "question": "What is the role of the {% extends %} tag in Twig?",
+    "answers": [
+      {"id": "a", "text": "It declares that the current template inherits from a parent and may override its blocks", "correct": true},
+      {"id": "b", "text": "It includes another template's content inline at the location of the tag", "correct": false},
+      {"id": "c", "text": "It imports a list of macros from another template", "correct": false},
+      {"id": "d", "text": "It renders the output of another controller in place", "correct": false}
+    ],
+    "explanation": "{% extends 'base.html.twig' %} sets up template inheritance. Blocks defined in the parent can be overridden in the child, and parent() lets the child reuse the parent block's content. It must be the first tag of the file.",
+    "doc_url": "https://twig.symfony.com/doc/3.x/tags/extends.html"
+  },
+  {
+    "id": "templating-007",
+    "type": "boolean",
+    "question": "By default, twig.strict_variables is set to %kernel.debug% — true in dev/test and false in prod.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "When strict_variables is true, accessing an undefined variable throws an exception. When false, Twig silently returns null. The default ties it to debug mode so issues surface during development without breaking production pages.",
+    "doc_url": "https://symfony.com/doc/current/reference/configuration/twig.html#strict-variables"
+  },
+  {
+    "id": "templating-008",
+    "type": "multiple",
+    "question": "Which of the following are valid Twig tests usable in {% if x is ... %}? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "defined", "correct": true},
+      {"id": "b", "text": "empty", "correct": true},
+      {"id": "c", "text": "divisible by(3)", "correct": true},
+      {"id": "d", "text": "equal", "correct": false}
+    ],
+    "explanation": "Twig provides tests like defined, null, empty, even, odd, divisible by(n), iterable, instanceof, sameas, constant. 'equal' is not a test — equality uses the == operator (e.g. {% if x == 5 %}).",
+    "doc_url": "https://twig.symfony.com/doc/3.x/tests/index.html"
+  },
+  {
+    "id": "templating-009",
+    "type": "single",
+    "question": "What is the difference between path() and url() in Twig?",
+    "answers": [
+      {"id": "a", "text": "path() returns a relative URL (e.g. /posts/1), url() returns an absolute URL with scheme and host", "correct": true},
+      {"id": "b", "text": "path() requires the route name, url() requires the URL", "correct": false},
+      {"id": "c", "text": "path() is for GET routes, url() is for POST routes", "correct": false},
+      {"id": "d", "text": "They are aliases — both return the same value", "correct": false}
+    ],
+    "explanation": "Both functions take a route name and parameters. path() generates an absolute path (e.g. /posts/1). url() generates a fully qualified URL (e.g. https://example.com/posts/1). Use url() when the URL is consumed outside the current site (emails, redirects).",
+    "doc_url": "https://symfony.com/doc/current/templates.html#linking-to-pages"
+  },
+  {
+    "id": "templating-010",
+    "type": "single",
+    "question": "What does the Twig function csrf_token('intention') return?",
+    "answers": [
+      {"id": "a", "text": "A CSRF token tied to the given intention, to be embedded in a hidden form field", "correct": true},
+      {"id": "b", "text": "The session ID encoded for use in the URL", "correct": false},
+      {"id": "c", "text": "A cookie value used by the firewall", "correct": false},
+      {"id": "d", "text": "The current user's API token", "correct": false}
+    ],
+    "explanation": "csrf_token() generates a one-time token bound to the given 'intention' (a unique key for the action being protected). It is normally added in non-Symfony forms; the controller then validates it via the CsrfTokenManager.",
+    "doc_url": "https://symfony.com/doc/current/security/csrf.html"
+  },
+  {
+    "id": "templating-011",
+    "type": "multiple",
+    "question": "Which of the following are properties exposed on the 'app' global variable? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "app.flashes", "correct": true},
+      {"id": "b", "text": "app.environment", "correct": true},
+      {"id": "c", "text": "app.current_route", "correct": true},
+      {"id": "d", "text": "app.kernel", "correct": false}
+    ],
+    "explanation": "The 'app' variable exposes user, request, session, environment, debug, flashes, locale, enabled_locales, current_route, current_route_parameters, token. The kernel itself is not exposed.",
+    "doc_url": "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+  },
+  {
+    "id": "templating-012",
+    "type": "single",
+    "question": "How do you override a template provided by a third-party bundle in your application?",
+    "answers": [
+      {"id": "a", "text": "Place a file at templates/bundles/BundleName/<same-relative-path>.html.twig", "correct": true},
+      {"id": "b", "text": "Edit the bundle's template directly under vendor/", "correct": false},
+      {"id": "c", "text": "Create a Twig extension that intercepts the template name", "correct": false},
+      {"id": "d", "text": "Register a new template namespace pointing to your file", "correct": false}
+    ],
+    "explanation": "Symfony automatically resolves bundle templates at templates/bundles/<BundleName>/ before the bundle's own Resources/views/. This convention lets you override any template without touching vendor code.",
+    "doc_url": "https://symfony.com/doc/current/bundles/override.html"
+  },
+  {
+    "id": "templating-013",
+    "type": "boolean",
+    "question": "By default, the {{ include('partial.html.twig') }} function passes the parent template's context (variables) to the included template.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "include() shares the calling template's variables by default. You can pass extra variables explicitly with the second argument, or isolate the included template entirely with with_context: false.",
+    "doc_url": "https://twig.symfony.com/doc/3.x/functions/include.html"
+  },
+  {
+    "id": "templating-014",
+    "type": "single",
+    "question": "What does {{ render(controller('App\\\\Controller\\\\BlogController::recent', {limit: 5})) }} do?",
+    "answers": [
+      {"id": "a", "text": "It runs the referenced controller as a sub-request and embeds its response content in the page", "correct": true},
+      {"id": "b", "text": "It generates a link to the controller's URL", "correct": false},
+      {"id": "c", "text": "It registers the controller as a Twig extension", "correct": false},
+      {"id": "d", "text": "It includes the source PHP code of the controller in the output", "correct": false}
+    ],
+    "explanation": "render(controller(...)) dispatches an internal sub-request to the given controller with the supplied arguments and inserts the rendered Response into the parent template. It is the recommended way to call controllers from a template.",
+    "doc_url": "https://symfony.com/doc/current/templates.html#embedding-controllers"
+  },
+  {
+    "id": "templating-015",
+    "type": "single",
+    "question": "What is the role of the asset() Twig function?",
+    "answers": [
+      {"id": "a", "text": "It returns a public URL for a static asset and applies the configured version/cache-busting strategy", "correct": true},
+      {"id": "b", "text": "It loads the asset's binary content into the template", "correct": false},
+      {"id": "c", "text": "It registers a new asset in the AssetMapper", "correct": false},
+      {"id": "d", "text": "It compiles SCSS/TS sources at runtime", "correct": false}
+    ],
+    "explanation": "asset() builds the public URL for a path relative to the public document root, taking into account the configured base path, package, and version (which appends a cache-busting query string or rewrites the URL).",
+    "doc_url": "https://symfony.com/doc/current/templates.html#linking-to-css-javascript-and-image-files"
+  },
+  {
+    "id": "templating-016",
+    "type": "single",
+    "question": "Which PHP attribute lets you declare a Twig filter directly on a static method without writing an extension class?",
+    "answers": [
+      {"id": "a", "text": "#[AsTwigFilter('name')]", "correct": true},
+      {"id": "b", "text": "#[TwigFilter('name')]", "correct": false},
+      {"id": "c", "text": "#[Filter('name')]", "correct": false},
+      {"id": "d", "text": "#[Twig\\Filter('name')]", "correct": false}
+    ],
+    "explanation": "#[AsTwigFilter] (and its sibling #[AsTwigFunction]/#[AsTwigTest]) registers a Twig filter from a method. The class is auto-tagged so you don't need to extend AbstractExtension or wire anything manually.",
+    "doc_url": "https://symfony.com/doc/current/templates.html"
+  },
+  {
+    "id": "templating-017",
+    "type": "multiple",
+    "question": "Which of the following are valid form-rendering Twig functions/tags? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "form_widget()", "correct": true},
+      {"id": "b", "text": "form_label()", "correct": true},
+      {"id": "c", "text": "form_errors()", "correct": true},
+      {"id": "d", "text": "form_validate()", "correct": false}
+    ],
+    "explanation": "Twig's form helpers include form_start, form_end, form_row, form_widget, form_label, form_errors, form_help, form_rest, plus the {% form_theme %} tag. There is no form_validate() — validation runs in PHP, not in templates.",
+    "doc_url": "https://symfony.com/doc/current/form/form_customization.html"
+  },
+  {
+    "id": "templating-018",
+    "type": "single",
+    "question": "What is a Twig macro used for?",
+    "answers": [
+      {"id": "a", "text": "Defining reusable parameterized template fragments, similar to functions", "correct": true},
+      {"id": "b", "text": "Registering a global filter at runtime", "correct": false},
+      {"id": "c", "text": "Caching a portion of a template", "correct": false},
+      {"id": "d", "text": "Declaring a route alias inside a template", "correct": false}
+    ],
+    "explanation": "Macros let you encapsulate template snippets that take arguments. They are imported with {% import 'macros.html.twig' as forms %} and called like functions: {{ forms.input('email', 'text') }}.",
+    "doc_url": "https://twig.symfony.com/doc/3.x/tags/macro.html"
+  },
+  {
+    "id": "templating-019",
+    "type": "single",
+    "question": "Which auto-escape strategy does Twig apply for a template named partial.js.twig?",
+    "answers": [
+      {"id": "a", "text": "JavaScript escaping", "correct": true},
+      {"id": "b", "text": "HTML escaping", "correct": false},
+      {"id": "c", "text": "No escaping (raw)", "correct": false},
+      {"id": "d", "text": "URL escaping", "correct": false}
+    ],
+    "explanation": "Symfony's Twig integration picks an auto-escape strategy from the file extension before .twig: html → HTML, js → JavaScript, css → CSS, xml → XML, etc. Files without a recognised extension default to HTML escaping.",
+    "doc_url": "https://symfony.com/doc/current/templates.html"
+  },
+  {
+    "id": "templating-020",
+    "type": "boolean",
+    "question": "Twig templates are compiled to PHP classes and cached on disk under var/cache/{env}/twig/.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Twig compiles each template to a dedicated PHP class on first use; the compiled file is cached in var/cache/{env}/twig/ and re-included on subsequent renders. In dev, auto_reload watches source files and recompiles on change.",
+    "doc_url": "https://symfony.com/doc/current/templates.html"
+  },
+  {
+    "id": "templating-021",
+    "type": "single",
+    "question": "When is the {{ dump(variable) }} Twig function available?",
+    "answers": [
+      {"id": "a", "text": "When DebugBundle is enabled (typically in dev/test environments)", "correct": true},
+      {"id": "b", "text": "Always — it ships with Twig core", "correct": false},
+      {"id": "c", "text": "Only when the WebProfilerBundle is installed", "correct": false},
+      {"id": "d", "text": "Only when twig.debug is set to true in production", "correct": false}
+    ],
+    "explanation": "The dump() function is provided by DebugBundle (which depends on the VarDumper component) and is registered with Twig automatically when the bundle is enabled — by default in dev and test, not in prod.",
+    "doc_url": "https://symfony.com/doc/current/templates.html#the-dump-twig-utilities"
+  },
+  {
+    "id": "templating-022",
+    "type": "single",
+    "question": "What does {% if is_granted('ROLE_ADMIN') %} do in a Twig template?",
+    "answers": [
+      {"id": "a", "text": "It calls the Security checker to determine whether the current user has the role/attribute", "correct": true},
+      {"id": "b", "text": "It checks the URL against firewall rules", "correct": false},
+      {"id": "c", "text": "It checks whether a CSRF token is valid for ROLE_ADMIN", "correct": false},
+      {"id": "d", "text": "It returns true only when running as the system root user", "correct": false}
+    ],
+    "explanation": "is_granted() delegates to the AuthorizationChecker (and its voters), evaluating the attribute (role, expression, or custom voter attribute) against the current security token. Always combine UI hiding with controller-side checks.",
+    "doc_url": "https://symfony.com/doc/current/security.html"
+  },
+  {
+    "id": "templating-023",
+    "type": "multiple",
+    "question": "Which of the following are valid Twig filters? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "raw — disables auto-escaping for the value", "correct": true},
+      {"id": "b", "text": "trans — translates the value via the Translator", "correct": true},
+      {"id": "c", "text": "json_encode — encodes the value as a JSON string", "correct": true},
+      {"id": "d", "text": "sql_escape — escapes the value for safe SQL use", "correct": false}
+    ],
+    "explanation": "Twig provides escape (e), raw, trans, trans_default_domain, json_encode, length, default, format, date, slice, batch, etc. There is no sql_escape filter — SQL escaping is the database driver's responsibility, not the templating engine's.",
+    "doc_url": "https://twig.symfony.com/doc/3.x/filters/index.html"
+  },
+  {
+    "id": "templating-024",
+    "type": "single",
+    "question": "What does the template name '@AcmeBlog/posts/show.html.twig' refer to?",
+    "answers": [
+      {"id": "a", "text": "The template 'posts/show.html.twig' under the AcmeBlogBundle namespace", "correct": true},
+      {"id": "b", "text": "A Twig macro stored in the AcmeBlog namespace", "correct": false},
+      {"id": "c", "text": "An asset published under the @AcmeBlog public path", "correct": false},
+      {"id": "d", "text": "A template fetched remotely from an HTTP source", "correct": false}
+    ],
+    "explanation": "Names starting with '@' refer to a Twig namespace, typically a bundle (AcmeBlogBundle → @AcmeBlog) or any custom path registered via twig.paths. Symfony resolves it by looking inside the namespace's directories (and the override location templates/bundles/).",
+    "doc_url": "https://symfony.com/doc/current/templates.html"
+  },
+  {
+    "id": "templating-025",
+    "type": "single",
+    "question": "What does {{ importmap('app') }} produce when AssetMapper is enabled?",
+    "answers": [
+      {"id": "a", "text": "The <script type=\"importmap\"> tag plus a <script type=\"module\"> tag for the 'app' entry", "correct": true},
+      {"id": "b", "text": "An <img> tag pointing to the application logo", "correct": false},
+      {"id": "c", "text": "A precompiled bundle of all JavaScript files in public/", "correct": false},
+      {"id": "d", "text": "An ESI fragment that lazily loads the application's JS", "correct": false}
+    ],
+    "explanation": "AssetMapper's importmap() function renders the import map (a <script type=\"importmap\"> with all your declared dependencies) and a <script type=\"module\"> that imports the requested entry, enabling native ES modules without bundling.",
+    "doc_url": "https://symfony.com/doc/current/frontend/asset_mapper.html"
+  }
+]

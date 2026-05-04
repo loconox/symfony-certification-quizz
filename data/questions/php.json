@@ -1,0 +1,309 @@
+[
+  {
+    "id": "php-001",
+    "type": "single",
+    "question": "Which PHP feature allows defining a class property and its type in the constructor signature directly?",
+    "answers": [
+      {"id": "a", "text": "Constructor property promotion", "correct": true},
+      {"id": "b", "text": "Property declaration shortcut", "correct": false},
+      {"id": "c", "text": "Typed constructor injection", "correct": false},
+      {"id": "d", "text": "Implicit property binding", "correct": false}
+    ],
+    "explanation": "Constructor property promotion (PHP 8.0+) allows declaring and initializing properties directly in the constructor parameter list using visibility modifiers.",
+    "doc_url": "https://www.php.net/manual/en/language.oop5.decon.php#language.oop5.decon.constructor.promotion"
+  },
+  {
+    "id": "php-002",
+    "type": "boolean",
+    "question": "In PHP 8.1+, enums can implement interfaces.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "PHP 8.1 enums can implement interfaces, which allows them to fulfill type contracts and use common behavior across different enum types.",
+    "doc_url": "https://www.php.net/manual/en/language.enumerations.interfaces.php"
+  },
+  {
+    "id": "php-003",
+    "type": "multiple",
+    "question": "Which of the following are valid PHP 8.0+ features? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Named arguments", "correct": true},
+      {"id": "b", "text": "Match expression", "correct": true},
+      {"id": "c", "text": "Nullsafe operator (?.)", "correct": true},
+      {"id": "d", "text": "Pattern matching with is keyword", "correct": false}
+    ],
+    "explanation": "PHP 8.0 introduced named arguments, match expressions, and the nullsafe operator. PHP does not have a pattern matching 'is' keyword — that belongs to other languages.",
+    "doc_url": "https://www.php.net/releases/8.0/en.php"
+  },
+  {
+    "id": "php-004",
+    "type": "single",
+    "question": "What is the output of: echo match(true) { 1 === 2 => 'a', 2 === 2 => 'b', default => 'c' };",
+    "answers": [
+      {"id": "a", "text": "a", "correct": false},
+      {"id": "b", "text": "b", "correct": true},
+      {"id": "c", "text": "c", "correct": false},
+      {"id": "d", "text": "Error", "correct": false}
+    ],
+    "explanation": "match uses strict comparison (===). match(true) checks each arm against true. '2 === 2' evaluates to true, so 'b' is returned.",
+    "doc_url": "https://www.php.net/manual/en/control-structures.match.php"
+  },
+  {
+    "id": "php-005",
+    "type": "boolean",
+    "question": "PHP readonly properties (PHP 8.1) can be modified after their first initialization.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Readonly properties can only be initialized once. Any subsequent attempt to modify them throws an Error. They are ideal for value objects.",
+    "doc_url": "https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties"
+  },
+  {
+    "id": "php-006",
+    "type": "boolean",
+    "question": "En PHP 8.1+, une propriété `readonly` peut être déclarée sans type explicite.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Les propriétés `readonly` en PHP 8.1 doivent obligatoirement avoir un type déclaré. Sans type, PHP génère une erreur de syntaxe. En PHP 8.2, les classes `readonly` permettent de déclarer toutes les propriétés typées comme readonly.",
+    "doc_url": "https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties"
+  },
+  {
+    "id": "php-007",
+    "type": "single",
+    "question": "Quel attribut PHP natif permet de marquer une classe, méthode ou propriété comme dépréciée depuis PHP 8.0 ?",
+    "answers": [
+      {"id": "a", "text": "#[Deprecated]", "correct": false},
+      {"id": "b", "text": "#[Obsolete]", "correct": false},
+      {"id": "c", "text": "#[SensitiveParameter]", "correct": false},
+      {"id": "d", "text": "Il n'existe pas d'attribut natif PHP pour la dépréciation avant PHP 8.4", "correct": true}
+    ],
+    "explanation": "PHP 8.4 introduit l'attribut natif `#[Deprecated]`. Avant PHP 8.4, la dépréciation s'effectuait via des annotations PHPDoc ou manuellement avec `trigger_error()`. `#[SensitiveParameter]` est un attribut PHP 8.2 pour masquer les paramètres dans les stack traces.",
+    "doc_url": "https://www.php.net/manual/en/class.deprecated.php"
+  },
+  {
+    "id": "php-008",
+    "type": "multiple",
+    "question": "Quelles affirmations concernant les Fibers PHP 8.1 sont correctes ? (sélectionnez toutes les bonnes réponses)",
+    "answers": [
+      {"id": "a", "text": "Une Fiber peut être suspendue avec `Fiber::suspend()`", "correct": true},
+      {"id": "b", "text": "Les Fibers sont des threads système natifs", "correct": false},
+      {"id": "c", "text": "Une Fiber terminée peut être redémarrée avec `start()`", "correct": false},
+      {"id": "d", "text": "Les Fibers permettent l'exécution concurrente coopérative dans un seul thread", "correct": true}
+    ],
+    "explanation": "Les Fibers (PHP 8.1) sont des coroutines légères permettant d'interrompre et reprendre l'exécution de manière coopérative, toujours dans un seul thread PHP. `Fiber::suspend()` interrompt la fiber et retourne le contrôle. Une fois terminée, une fiber ne peut pas être redémarrée.",
+    "doc_url": "https://www.php.net/manual/en/class.fiber.php"
+  },
+  {
+    "id": "php-009",
+    "type": "boolean",
+    "question": "L'opérateur nullsafe `?->` en PHP 8.0 peut être chaîné plusieurs fois dans la même expression.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "L'opérateur nullsafe permet le chaînage : `$user?->getAddress()?->getCity()`. Si l'un des appels retourne null, toute la chaîne court-circuite et retourne null sans lever d'exception.",
+    "doc_url": "https://www.php.net/manual/en/migration80.new-features.php#migration80.new-features.nullsafe-operator"
+  },
+  {
+    "id": "php-010",
+    "type": "single",
+    "question": "Que fait le code suivant : `$fn = strlen(...);` suivi de `$fn('hello');` ?",
+    "answers": [
+      {"id": "a", "text": "Lève une erreur de syntaxe", "correct": false},
+      {"id": "b", "text": "Crée un first class callable à partir de `strlen` et retourne 5", "correct": true},
+      {"id": "c", "text": "Appelle `strlen` immédiatement et stocke le résultat dans `$fn`", "correct": false},
+      {"id": "d", "text": "Crée une closure anonyme sans lien avec `strlen`", "correct": false}
+    ],
+    "explanation": "PHP 8.1 introduit les First Class Callables : `strlen(...)` crée un objet `Closure` qui encapsule `strlen`. L'objet `Closure` peut ensuite être invoqué comme une fonction normale, retournant 5 pour la chaîne 'hello'.",
+    "doc_url": "https://www.php.net/manual/en/functions.first_class_callable_syntax.php"
+  },
+  {
+    "id": "php-011",
+    "type": "multiple",
+    "question": "Lesquelles de ces déclarations de types sont valides en PHP 8.0+ ? (sélectionnez toutes les bonnes réponses)",
+    "answers": [
+      {"id": "a", "text": "`function foo(int|string $x): void`", "correct": true},
+      {"id": "b", "text": "`function foo(Iterator&Countable $x): void`", "correct": true},
+      {"id": "c", "text": "`function foo(int&string $x): void`", "correct": false},
+      {"id": "d", "text": "`function foo(int|null $x): void`", "correct": true}
+    ],
+    "explanation": "Les union types (PHP 8.0) utilisent `|`, les intersection types (PHP 8.1) utilisent `&`. `int&string` est invalide car une valeur ne peut pas être à la fois `int` et `string`. `int|null` est équivalent à `?int`. `Iterator&Countable` est valide car une classe peut implémenter les deux interfaces.",
+    "doc_url": "https://www.php.net/manual/en/language.types.type-system.php"
+  },
+  {
+    "id": "php-012",
+    "type": "boolean",
+    "question": "En PHP 8.1+, les enums peuvent avoir des propriétés d'instance (non statiques).",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Les enums PHP 8.1 n'autorisent pas les propriétés d'instance. Ils peuvent avoir des constantes, des méthodes (y compris statiques), implémenter des interfaces et utiliser des traits, mais pas déclarer de propriétés d'instance.",
+    "doc_url": "https://www.php.net/manual/en/language.enumerations.php"
+  },
+  {
+    "id": "php-013",
+    "type": "single",
+    "question": "Dans Symfony, quel attribut PHP permet d'injecter automatiquement un service dans le constructeur en précisant son identifiant de service explicitement ?",
+    "answers": [
+      {"id": "a", "text": "#[Inject]", "correct": false},
+      {"id": "b", "text": "#[AutowireService]", "correct": false},
+      {"id": "c", "text": "#[Autowire]", "correct": true},
+      {"id": "d", "text": "#[InjectService]", "correct": false}
+    ],
+    "explanation": "L'attribut `#[Autowire]` de Symfony permet de préciser explicitement le service à injecter, par exemple `#[Autowire(service: 'my.service')]` ou `#[Autowire('%env(MY_VAR)%')]` pour des paramètres. Cet attribut fait partie du composant DependencyInjection.",
+    "doc_url": "https://symfony.com/doc/current/service_container/autowiring.html#autowire-attribute"
+  },
+  {
+    "id": "php-014",
+    "type": "single",
+    "question": "Quelle est la différence principale entre un `Pure Enum` et un `Backed Enum` en PHP 8.1 ?",
+    "answers": [
+      {"id": "a", "text": "Un Backed Enum peut implémenter des interfaces, pas le Pure Enum", "correct": false},
+      {"id": "b", "text": "Un Backed Enum associe chaque case à une valeur scalaire (int ou string), le Pure Enum n'a pas de valeur associée", "correct": true},
+      {"id": "c", "text": "Un Pure Enum est abstract, un Backed Enum est concret", "correct": false},
+      {"id": "d", "text": "Un Backed Enum ne peut pas avoir de méthodes", "correct": false}
+    ],
+    "explanation": "Un Backed Enum déclare un type scalaire (`string` ou `int`) et chaque case possède une valeur associée accessible via `->value`. Il implémente automatiquement `BackedEnum` et offre les méthodes `from()` et `tryFrom()`. Un Pure Enum n'a pas de valeur scalaire associée.",
+    "doc_url": "https://www.php.net/manual/en/language.enumerations.backed.php"
+  },
+  {
+    "id": "php-015",
+    "type": "boolean",
+    "question": "Une classe `readonly` en PHP 8.2 interdit toute modification de ses propriétés, même depuis ses méthodes internes.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Déclarer une classe `readonly` (PHP 8.2) rend automatiquement toutes ses propriétés `readonly`. Aucune méthode de la classe ne peut modifier ces propriétés après leur initialisation (lors de la construction). Cela garantit l'immuabilité totale de l'objet.",
+    "doc_url": "https://www.php.net/manual/en/language.oop5.basic.php#language.oop5.basic.class.readonly"
+  },
+  {
+    "id": "php-016",
+    "type": "multiple",
+    "question": "Quelles caractéristiques s'appliquent aux traits PHP ? (sélectionnez toutes les bonnes réponses)",
+    "answers": [
+      {"id": "a", "text": "Un trait peut définir des méthodes abstraites", "correct": true},
+      {"id": "b", "text": "Un trait peut être instancié directement", "correct": false},
+      {"id": "c", "text": "Une classe peut utiliser plusieurs traits simultanément", "correct": true},
+      {"id": "d", "text": "Un trait peut définir des constantes depuis PHP 8.2", "correct": true}
+    ],
+    "explanation": "Les traits ne peuvent pas être instanciés. Ils peuvent définir des méthodes abstraites (la classe utilisatrice doit les implémenter), et une classe peut `use` plusieurs traits. PHP 8.2 permet aux traits de définir des constantes, auparavant impossible.",
+    "doc_url": "https://www.php.net/manual/en/language.oop5.traits.php"
+  },
+  {
+    "id": "php-017",
+    "type": "single",
+    "question": "Comment lire la valeur d'un attribut PHP appliqué à une classe depuis le code, en utilisant la Reflection API ?",
+    "answers": [
+      {"id": "a", "text": "`(new ReflectionClass($obj))->getAttribute(MyAttr::class)`", "correct": false},
+      {"id": "b", "text": "`(new ReflectionClass($obj))->getAttributes(MyAttr::class)[0]->newInstance()`", "correct": true},
+      {"id": "c", "text": "`Attribute::get($obj, MyAttr::class)`", "correct": false},
+      {"id": "d", "text": "`$obj->getAttributes()[MyAttr::class]`", "correct": false}
+    ],
+    "explanation": "La Reflection API expose `getAttributes()` sur `ReflectionClass`, `ReflectionMethod`, etc. Cette méthode retourne un tableau de `ReflectionAttribute`. Pour instancier l'attribut et accéder à ses valeurs, on appelle `->newInstance()` sur l'objet `ReflectionAttribute`.",
+    "doc_url": "https://www.php.net/manual/en/reflectionclass.getattributes.php"
+  },
+  {
+    "id": "php-018",
+    "type": "boolean",
+    "question": "En PHP, une closure créée avec `function() {}` capture automatiquement les variables du scope parent.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "En PHP, les closures ne capturent pas automatiquement le scope parent. Il faut utiliser le mot-clé `use` pour importer des variables : `function() use ($var) {}`. Les arrow functions (`fn() =>`) capturent automatiquement le scope parent par valeur.",
+    "doc_url": "https://www.php.net/manual/en/functions.anonymous.php"
+  },
+  {
+    "id": "php-019",
+    "type": "single",
+    "question": "Quelle est la syntaxe correcte pour utiliser les named arguments en PHP 8.0 lors d'un appel de fonction ?",
+    "answers": [
+      {"id": "a", "text": "`array_slice(array: $arr, offset: 1, length: 3)`", "correct": true},
+      {"id": "b", "text": "`array_slice($arr, offset=1, length=3)`", "correct": false},
+      {"id": "c", "text": "`array_slice($arr, :offset 1, :length 3)`", "correct": false},
+      {"id": "d", "text": "`array_slice($arr, offset => 1, length => 3)`", "correct": false}
+    ],
+    "explanation": "Les named arguments en PHP 8.0 utilisent la syntaxe `nomDuParamètre: valeur`. Ils permettent de passer les arguments dans n'importe quel ordre, d'omettre les valeurs par défaut intermédiaires, et améliorent la lisibilité du code.",
+    "doc_url": "https://www.php.net/manual/en/functions.named-arguments.php"
+  },
+  {
+    "id": "php-020",
+    "type": "multiple",
+    "question": "Lesquelles de ces affirmations sur la gestion des exceptions en PHP sont correctes ? (sélectionnez toutes les bonnes réponses)",
+    "answers": [
+      {"id": "a", "text": "Un bloc `finally` s'exécute toujours, même si une exception est levée et non interceptée", "correct": true},
+      {"id": "b", "text": "PHP 8.0 permet d'attraper plusieurs types d'exceptions dans un seul `catch` avec `|`", "correct": true},
+      {"id": "c", "text": "On peut attraper une `Error` avec `catch (\\Throwable $e)`", "correct": true},
+      {"id": "d", "text": "`Error` étend `Exception` en PHP 7+", "correct": false}
+    ],
+    "explanation": "`finally` s'exécute toujours. PHP 8.0 permet `catch (TypeA | TypeB $e)`. `Error` et `Exception` implémentent toutes deux `Throwable` mais sont des hiérarchies séparées : `Error` n'étend pas `Exception`. On attrape les deux avec `catch (\\Throwable $e)`.",
+    "doc_url": "https://www.php.net/manual/en/language.exceptions.php"
+  },
+  {
+    "id": "php-021",
+    "type": "boolean",
+    "question": "Les arrow functions PHP (`fn() =>`) peuvent modifier les variables capturées du scope parent.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Les arrow functions capturent les variables du scope parent par valeur (pas par référence). Toute modification à l'intérieur d'une arrow function n'affecte pas la variable originale du scope parent. Pour capturer par référence, il faut utiliser une closure classique avec `use (&$var)`.",
+    "doc_url": "https://www.php.net/manual/en/functions.arrow.php"
+  },
+  {
+    "id": "php-022",
+    "type": "single",
+    "question": "Que retourne `BackedEnum::tryFrom('valeur_inexistante')` si la valeur n'existe pas dans l'enum ?",
+    "answers": [
+      {"id": "a", "text": "Lève une `ValueError`", "correct": false},
+      {"id": "b", "text": "Retourne `false`", "correct": false},
+      {"id": "c", "text": "Retourne `null`", "correct": true},
+      {"id": "d", "text": "Retourne l'instance du premier case de l'enum", "correct": false}
+    ],
+    "explanation": "`tryFrom()` retourne `null` si la valeur ne correspond à aucun case de l'enum backed. À l'inverse, `from()` lève une `ValueError`. Cela permet un code défensif : `$suit = Suit::tryFrom($value) ?? Suit::Hearts;`.",
+    "doc_url": "https://www.php.net/manual/en/backedenum.tryfrom.php"
+  },
+  {
+    "id": "php-023",
+    "type": "multiple",
+    "question": "Dans le contexte de Symfony et des attributs PHP, lesquels de ces attributs sont fournis par le composant HttpKernel pour les contrôleurs ? (sélectionnez toutes les bonnes réponses)",
+    "answers": [
+      {"id": "a", "text": "#[MapQueryParameter]", "correct": true},
+      {"id": "b", "text": "#[MapRequestPayload]", "correct": true},
+      {"id": "c", "text": "#[Autowire]", "correct": false},
+      {"id": "d", "text": "#[MapUploadedFile]", "correct": true}
+    ],
+    "explanation": "`#[MapQueryParameter]`, `#[MapRequestPayload]` et `#[MapUploadedFile]` appartiennent au composant HttpKernel et permettent de mapper automatiquement des données de la requête vers des arguments de contrôleur. `#[Autowire]` appartient au composant DependencyInjection.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#mapping-request-data"
+  },
+  {
+    "id": "php-024",
+    "type": "boolean",
+    "question": "En PHP 8.0+, la `match` expression effectue des comparaisons strictes (===) et non lâches (==).",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Contrairement au `switch` qui utilise `==` (comparaison lâche), `match` utilise `===` (comparaison stricte). Ainsi `match(0) { '0' => 'string' }` lèvera une `UnhandledMatchError` car `0 !== '0'`, alors qu'un `switch(0)` aurait exécuté le cas `'0'`.",
+    "doc_url": "https://www.php.net/manual/en/control-structures.match.php"
+  },
+  {
+    "id": "php-025",
+    "type": "multiple",
+    "question": "Quelles affirmations concernant les classes abstraites et les interfaces en PHP sont correctes ? (sélectionnez toutes les bonnes réponses)",
+    "answers": [
+      {"id": "a", "text": "Une classe abstraite peut avoir des méthodes avec une implémentation", "correct": true},
+      {"id": "b", "text": "Une interface peut déclarer des constantes", "correct": true},
+      {"id": "c", "text": "Une classe peut étendre plusieurs classes abstraites", "correct": false},
+      {"id": "d", "text": "Une interface peut étendre plusieurs autres interfaces", "correct": true}
+    ],
+    "explanation": "Les classes abstraites peuvent mélanger méthodes concrètes et abstraites, et les interfaces peuvent déclarer des constantes (PHP 8.1 permet même de les rendre `final`). PHP ne supporte pas l'héritage multiple de classes. En revanche, une interface peut étendre plusieurs interfaces avec `interface A extends B, C`.",
+    "doc_url": "https://www.php.net/manual/en/language.oop5.abstract.php"
+  }
+]

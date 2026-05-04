@@ -1,0 +1,317 @@
+[
+  {
+    "id": "forms-001",
+    "type": "single",
+    "question": "Which method do you call on a form to check if it was submitted AND is valid?",
+    "answers": [
+      {"id": "a", "text": "$form->isSubmitted() && $form->isValid()", "correct": true},
+      {"id": "b", "text": "$form->isValid()", "correct": false},
+      {"id": "c", "text": "$form->handleRequest($request)->isValid()", "correct": false},
+      {"id": "d", "text": "$form->submit() && $form->validate()", "correct": false}
+    ],
+    "explanation": "Best practice is to always check isSubmitted() before isValid(), because isValid() returns false on an unsubmitted form. handleRequest() must be called before these checks.",
+    "doc_url": "https://symfony.com/doc/current/forms.html#processing-forms"
+  },
+  {
+    "id": "forms-002",
+    "type": "boolean",
+    "question": "Symfony forms include CSRF protection by default.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Symfony's Form component includes CSRF token protection by default. It adds a hidden field with a token that is validated server-side. You can disable it per form with 'csrf_protection' => false.",
+    "doc_url": "https://symfony.com/doc/current/security/csrf.html"
+  },
+  {
+    "id": "forms-003",
+    "type": "single",
+    "question": "Which class should a custom form type extend?",
+    "answers": [
+      {"id": "a", "text": "Symfony\\Component\\Form\\AbstractType", "correct": true},
+      {"id": "b", "text": "Symfony\\Component\\Form\\FormType", "correct": false},
+      {"id": "c", "text": "Symfony\\Bundle\\FrameworkBundle\\Form\\Type", "correct": false},
+      {"id": "d", "text": "Symfony\\Component\\Form\\BaseFormType", "correct": false}
+    ],
+    "explanation": "Custom form types extend AbstractType and typically implement buildForm() and configureOptions() methods. The getParent() method can specify a parent form type.",
+    "doc_url": "https://symfony.com/doc/current/form/create_custom_field_type.html"
+  },
+  {
+    "id": "forms-004",
+    "type": "multiple",
+    "question": "Which of the following are built-in Symfony form field types? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "TextType", "correct": true},
+      {"id": "b", "text": "ChoiceType", "correct": true},
+      {"id": "c", "text": "DateTimeType", "correct": true},
+      {"id": "d", "text": "RichTextType", "correct": false}
+    ],
+    "explanation": "Symfony includes TextType, ChoiceType, DateTimeType, EmailType, FileType, etc. There is no built-in RichTextType — you would need a third-party bundle for a WYSIWYG editor.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types.html"
+  },
+  {
+    "id": "forms-005",
+    "type": "single",
+    "question": "What is the role of the data_class option on a form type?",
+    "answers": [
+      {"id": "a", "text": "It tells the form which class to bind to, so submitted data is mapped onto an object of that class", "correct": true},
+      {"id": "b", "text": "It defines the JSON-encoded shape of the form when serialized for an API", "correct": false},
+      {"id": "c", "text": "It restricts which controllers are allowed to render the form", "correct": false},
+      {"id": "d", "text": "It is automatically inferred and should never be set manually", "correct": false}
+    ],
+    "explanation": "data_class binds the form to a class (typically a Doctrine entity or DTO). Symfony then maps fields to properties, instantiates the class when needed (empty_data), and lets the validator read constraints from the class.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/form.html#data-class"
+  },
+  {
+    "id": "forms-006",
+    "type": "single",
+    "question": "Which option do you set on a form field to prevent it from being mapped to a property of the data_class?",
+    "answers": [
+      {"id": "a", "text": "'mapped' => false", "correct": true},
+      {"id": "b", "text": "'virtual' => true", "correct": false},
+      {"id": "c", "text": "'data_class' => null", "correct": false},
+      {"id": "d", "text": "'inherit_data' => true", "correct": false}
+    ],
+    "explanation": "mapped: false keeps the field on the form (it is rendered and submitted), but the bound object is not updated with its value. Useful for fields like 'agree to terms' that should not be persisted on the entity.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/form.html#mapped"
+  },
+  {
+    "id": "forms-007",
+    "type": "boolean",
+    "question": "Setting the 'required' option to true on a form field automatically adds a NotBlank validation constraint server-side.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "'required' only controls the HTML5 required attribute (and the asterisk on the label). Server-side validation requires you to attach an explicit constraint (e.g. #[Assert\\NotBlank] on the property or constraints option on the field).",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/form.html#required"
+  },
+  {
+    "id": "forms-008",
+    "type": "multiple",
+    "question": "Which form events are dispatched during the submission lifecycle? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "FormEvents::PRE_SUBMIT", "correct": true},
+      {"id": "b", "text": "FormEvents::SUBMIT", "correct": true},
+      {"id": "c", "text": "FormEvents::POST_SUBMIT", "correct": true},
+      {"id": "d", "text": "FormEvents::FINAL_SUBMIT", "correct": false}
+    ],
+    "explanation": "The form component dispatches PRE_SET_DATA, POST_SET_DATA, PRE_SUBMIT (raw input), SUBMIT (after view-to-norm transform), and POST_SUBMIT (final). PRE_SUBMIT is commonly used to dynamically modify the form before binding.",
+    "doc_url": "https://symfony.com/doc/current/form/events.html"
+  },
+  {
+    "id": "forms-009",
+    "type": "single",
+    "question": "Which form type loads its choices from a Doctrine repository?",
+    "answers": [
+      {"id": "a", "text": "EntityType", "correct": true},
+      {"id": "b", "text": "ChoiceType", "correct": false},
+      {"id": "c", "text": "DoctrineType", "correct": false},
+      {"id": "d", "text": "RepositoryType", "correct": false}
+    ],
+    "explanation": "EntityType (from doctrine/orm-bundle) extends ChoiceType. It accepts class, choice_label, query_builder, group_by, choice_value to query an entity repository and turn the results into choices.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/entity.html"
+  },
+  {
+    "id": "forms-010",
+    "type": "single",
+    "question": "What is the purpose of a DataTransformer on a form field?",
+    "answers": [
+      {"id": "a", "text": "To convert values between the model representation and the view/normalized representation in both directions", "correct": true},
+      {"id": "b", "text": "To validate the value against business rules before submission", "correct": false},
+      {"id": "c", "text": "To translate form labels into multiple languages", "correct": false},
+      {"id": "d", "text": "To attach a CSRF token to the field", "correct": false}
+    ],
+    "explanation": "DataTransformers implement transform() (model → norm/view) and reverseTransform() (view/norm → model). Two slots exist: model transformers (model ↔ norm) and view transformers (norm ↔ view). Use addModelTransformer() / addViewTransformer().",
+    "doc_url": "https://symfony.com/doc/current/form/data_transformers.html"
+  },
+  {
+    "id": "forms-011",
+    "type": "multiple",
+    "question": "Which CollectionType options control whether elements can be added or removed dynamically? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "allow_add", "correct": true},
+      {"id": "b", "text": "allow_delete", "correct": true},
+      {"id": "c", "text": "by_reference", "correct": false},
+      {"id": "d", "text": "prototype", "correct": false}
+    ],
+    "explanation": "allow_add and allow_delete govern whether the form will accept new entries or remove missing ones. by_reference controls whether the setter is called on the parent object. 'prototype' enables a JS-friendly template for new rows but does not authorize add/delete.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/collection.html"
+  },
+  {
+    "id": "forms-012",
+    "type": "single",
+    "question": "What does the 'validation_groups' option do?",
+    "answers": [
+      {"id": "a", "text": "It selects which Validator groups are evaluated when the form is submitted", "correct": true},
+      {"id": "b", "text": "It groups multiple form fields under a common label in the rendered HTML", "correct": false},
+      {"id": "c", "text": "It registers a new shared validator across multiple forms", "correct": false},
+      {"id": "d", "text": "It defines which CSS class to apply to invalid fields", "correct": false}
+    ],
+    "explanation": "Constraints can be assigned to validation groups (e.g. #[Assert\\NotBlank(groups: ['registration'])]). The form's validation_groups option (array, false to disable, or callable) selects which groups to run during validation.",
+    "doc_url": "https://symfony.com/doc/current/form/validation_groups.html"
+  },
+  {
+    "id": "forms-013",
+    "type": "boolean",
+    "question": "Calling $form->isValid() on a form that has not been submitted via handleRequest() or submit() always returns false.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "isValid() returns false unless the form has been submitted. That's why the canonical pattern is: $form->handleRequest($request); if ($form->isSubmitted() && $form->isValid()) { ... }.",
+    "doc_url": "https://symfony.com/doc/current/forms.html#processing-forms"
+  },
+  {
+    "id": "forms-014",
+    "type": "single",
+    "question": "What is the difference between Form::getData() and Form::getViewData()?",
+    "answers": [
+      {"id": "a", "text": "getData() returns the underlying model object/value, getViewData() returns the value in its rendered (HTML) representation", "correct": true},
+      {"id": "b", "text": "getData() returns submitted raw data, getViewData() returns CSRF tokens", "correct": false},
+      {"id": "c", "text": "They are aliases — both return the same value", "correct": false},
+      {"id": "d", "text": "getData() is for parent forms, getViewData() is for child forms", "correct": false}
+    ],
+    "explanation": "Form data goes through three stages: model data ↔ normalized data ↔ view data, separated by transformers. getData() returns the model data, getNormData() the normalized middle stage, getViewData() the rendered representation.",
+    "doc_url": "https://symfony.com/doc/current/form/data_transformers.html"
+  },
+  {
+    "id": "forms-015",
+    "type": "single",
+    "question": "Which option do you set on the CollectionType to expose a JavaScript-friendly blueprint row?",
+    "answers": [
+      {"id": "a", "text": "prototype: true", "correct": true},
+      {"id": "b", "text": "blueprint: true", "correct": false},
+      {"id": "c", "text": "js_template: true", "correct": false},
+      {"id": "d", "text": "renderable: true", "correct": false}
+    ],
+    "explanation": "When prototype is enabled, the rendered form contains a hidden 'data-prototype' attribute holding the HTML for an empty entry, with __name__ as a placeholder. JavaScript replaces it to add new rows dynamically.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/collection.html#prototype"
+  },
+  {
+    "id": "forms-016",
+    "type": "single",
+    "question": "What is the purpose of a FormTypeExtension (with getExtendedTypes())?",
+    "answers": [
+      {"id": "a", "text": "To add or override options/behaviour on existing form types without subclassing them", "correct": true},
+      {"id": "b", "text": "To register a brand new form type with a unique alias", "correct": false},
+      {"id": "c", "text": "To extend the validator with new constraints", "correct": false},
+      {"id": "d", "text": "To translate form labels at runtime", "correct": false}
+    ],
+    "explanation": "FormTypeExtensions let you globally augment one or several types: you can configure new options, attach event listeners, modify the view. getExtendedTypes() returns the list of types the extension applies to (e.g. FormType::class for all forms).",
+    "doc_url": "https://symfony.com/doc/current/form/create_form_type_extension.html"
+  },
+  {
+    "id": "forms-017",
+    "type": "boolean",
+    "question": "ChoiceType with options 'expanded' => true and 'multiple' => true is rendered as a list of checkboxes.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "ChoiceType renders depend on the combination: expanded=false/multiple=false → <select>, expanded=false/multiple=true → multi-<select>, expanded=true/multiple=false → radios, expanded=true/multiple=true → checkboxes.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/choice.html"
+  },
+  {
+    "id": "forms-018",
+    "type": "single",
+    "question": "Which form type pairs two identical fields and rejects the submission unless they match?",
+    "answers": [
+      {"id": "a", "text": "RepeatedType", "correct": true},
+      {"id": "b", "text": "PasswordType", "correct": false},
+      {"id": "c", "text": "TwinType", "correct": false},
+      {"id": "d", "text": "ConfirmType", "correct": false}
+    ],
+    "explanation": "RepeatedType renders two child fields (e.g. password and confirm password) and only accepts the submission if both values are equal. The 'type' option configures the inner field type, options/first_options/second_options customize each side.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/repeated.html"
+  },
+  {
+    "id": "forms-019",
+    "type": "multiple",
+    "question": "Which of the following are options on the EntityType form field? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "class", "correct": true},
+      {"id": "b", "text": "choice_label", "correct": true},
+      {"id": "c", "text": "query_builder", "correct": true},
+      {"id": "d", "text": "where", "correct": false}
+    ],
+    "explanation": "EntityType exposes class, em (entity manager name), choice_label, choice_value, query_builder, group_by, choice_translation_domain. There is no 'where' option — to restrict the choices, build a custom QueryBuilder via query_builder.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/entity.html"
+  },
+  {
+    "id": "forms-020",
+    "type": "single",
+    "question": "How do you globally apply a form theme (e.g. Bootstrap 5) to every form in a Symfony application?",
+    "answers": [
+      {"id": "a", "text": "Set twig.form_themes in config/packages/twig.yaml to the desired layout file", "correct": true},
+      {"id": "b", "text": "Implement a Twig extension that intercepts every form rendering call", "correct": false},
+      {"id": "c", "text": "Pass the theme as the third argument to createForm()", "correct": false},
+      {"id": "d", "text": "Register a compiler pass adding the theme to the FormFactory", "correct": false}
+    ],
+    "explanation": "twig.form_themes accepts a list of theme files (e.g. 'bootstrap_5_layout.html.twig'). For per-template themes, use the {% form_theme form 'my_theme.html.twig' %} tag. Themes are layered, with later entries overriding earlier ones.",
+    "doc_url": "https://symfony.com/doc/current/form/form_themes.html"
+  },
+  {
+    "id": "forms-021",
+    "type": "single",
+    "question": "What does the by_reference option control on a child form bound to a collection-like property?",
+    "answers": [
+      {"id": "a", "text": "Whether the parent's setter is called or the existing collection is mutated in place", "correct": true},
+      {"id": "b", "text": "Whether the field is exposed by reference in the JSON-LD representation", "correct": false},
+      {"id": "c", "text": "Whether the form sends data via HTTP reference link headers", "correct": false},
+      {"id": "d", "text": "Whether the field is required to have at least one element", "correct": false}
+    ],
+    "explanation": "By default (true), the child collection is modified in place and no setter is invoked — efficient with Doctrine collections. Setting it to false forces Symfony to call the setter, which is sometimes needed when the parent's setter has side effects.",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/form.html#by-reference"
+  },
+  {
+    "id": "forms-022",
+    "type": "single",
+    "question": "Where can you place validation constraints that the Form component picks up automatically?",
+    "answers": [
+      {"id": "a", "text": "On the data_class properties via attributes/YAML/XML, or on the form field via the 'constraints' option", "correct": true},
+      {"id": "b", "text": "Only on the form field via the 'constraints' option — entity-level constraints are ignored", "correct": false},
+      {"id": "c", "text": "Only on the entity — form-level constraints are not supported", "correct": false},
+      {"id": "d", "text": "In a separate config/validation.yaml file referenced by twig.form_themes", "correct": false}
+    ],
+    "explanation": "Symfony's form integration reads constraints both from the bound class metadata (attributes #[Assert\\...]) and from the per-field 'constraints' option. The two are merged when the form is validated.",
+    "doc_url": "https://symfony.com/doc/current/forms.html"
+  },
+  {
+    "id": "forms-023",
+    "type": "boolean",
+    "question": "When a SubmitType button is part of a form, you can detect which submit button triggered the request via $form->getClickedButton().",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Forms can have multiple SubmitType buttons (e.g. 'Save' vs 'Save and add another'). After submission, getClickedButton() returns the SubmitButton form clicked, allowing the controller to branch on it.",
+    "doc_url": "https://symfony.com/doc/current/form/multiple_buttons.html"
+  },
+  {
+    "id": "forms-024",
+    "type": "single",
+    "question": "What is the role of the form Type Guesser?",
+    "answers": [
+      {"id": "a", "text": "It infers a sensible field type, required flag, max length and pattern from metadata when no type is specified", "correct": true},
+      {"id": "b", "text": "It auto-completes form types in your IDE", "correct": false},
+      {"id": "c", "text": "It detects the user's locale to pick the right widgets", "correct": false},
+      {"id": "d", "text": "It guesses CSRF tokens to inject in incoming requests", "correct": false}
+    ],
+    "explanation": "When you call ->add('email') without a type, Symfony asks the registered type guessers (Validator, Doctrine, etc.) to infer the field type and constraints from the property metadata. Useful for prototypes; less precise than declaring the type explicitly.",
+    "doc_url": "https://symfony.com/doc/current/form/type_guesser.html"
+  },
+  {
+    "id": "forms-025",
+    "type": "single",
+    "question": "Which option lets you accept submitted fields that are not declared on the form?",
+    "answers": [
+      {"id": "a", "text": "allow_extra_fields: true", "correct": true},
+      {"id": "b", "text": "ignore_unknown: true", "correct": false},
+      {"id": "c", "text": "permissive: true", "correct": false},
+      {"id": "d", "text": "extra_data: keep", "correct": false}
+    ],
+    "explanation": "By default, a form rejects unknown submitted fields with an 'extra fields' error to prevent typos and silent acceptance. Setting allow_extra_fields: true silences that error. The extra fields can be retrieved via $form->getExtraData().",
+    "doc_url": "https://symfony.com/doc/current/reference/forms/types/form.html#allow-extra-fields"
+  }
+]

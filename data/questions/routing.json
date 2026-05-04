@@ -1,0 +1,319 @@
+[
+  {
+    "id": "routing-001",
+    "type": "single",
+    "question": "Which PHP attribute is used to define a route in Symfony 7/8?",
+    "answers": [
+      {"id": "a", "text": "#[Route('/path', name: 'route_name')]", "correct": true},
+      {"id": "b", "text": "@Route('/path', name='route_name')", "correct": false},
+      {"id": "c", "text": "#[Path('/path')]", "correct": false},
+      {"id": "d", "text": "#[Endpoint('/path')]", "correct": false}
+    ],
+    "explanation": "Symfony 7/8 use PHP attributes for routing. The #[Route] attribute from Symfony\\Component\\Routing\\Attribute\\Route replaces the old @Route annotation.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-002",
+    "type": "boolean",
+    "question": "In Symfony routing, route parameters wrapped in {braces} are required by default.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Route parameters like {id} are required by default. You can make them optional by providing a default value in the 'defaults' option or as a PHP default parameter value.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#optional-parameters"
+  },
+  {
+    "id": "routing-003",
+    "type": "single",
+    "question": "How do you restrict a route parameter to only accept integers in Symfony?",
+    "answers": [
+      {"id": "a", "text": "Using 'requirements' with a regex like '\\d+'", "correct": true},
+      {"id": "b", "text": "Type-hinting the parameter as int in the controller", "correct": false},
+      {"id": "c", "text": "Using the 'type' option in #[Route]", "correct": false},
+      {"id": "d", "text": "Using #[ParamConverter] with strict mode", "correct": false}
+    ],
+    "explanation": "Route parameter requirements are defined using regex patterns. The requirements option (or inline {id<\\d+>} syntax) restricts what values a parameter can match.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#parameters-validation"
+  },
+  {
+    "id": "routing-004",
+    "type": "multiple",
+    "question": "Which information can be matched using Symfony routing conditions? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "HTTP method (GET, POST, etc.)", "correct": true},
+      {"id": "b", "text": "Domain/hostname", "correct": true},
+      {"id": "c", "text": "HTTP scheme (http/https)", "correct": true},
+      {"id": "d", "text": "Client IP address", "correct": false}
+    ],
+    "explanation": "Symfony routes can match on HTTP method (methods option), domain (host option), and scheme (schemes option). IP-based routing is not natively supported in the routing component.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#matching-http-methods"
+  },
+  {
+    "id": "routing-005",
+    "type": "single",
+    "question": "What does the special _format placeholder in a route do?",
+    "answers": [
+      {"id": "a", "text": "It sets the request format (e.g. json, xml, html), influencing content negotiation", "correct": true},
+      {"id": "b", "text": "It selects the YAML, PHP or attribute loader for the route", "correct": false},
+      {"id": "c", "text": "It changes the format of the route name in URL generation", "correct": false},
+      {"id": "d", "text": "It is required for every API route", "correct": false}
+    ],
+    "explanation": "_format is a Symfony-specific placeholder. When matched (e.g. /api/users.{_format}), the value is set on the Request, allowing the controller and listeners to vary content negotiation accordingly.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-006",
+    "type": "single",
+    "question": "Which constant do you pass to UrlGeneratorInterface::generate() to obtain a fully qualified URL (with scheme and host)?",
+    "answers": [
+      {"id": "a", "text": "UrlGeneratorInterface::ABSOLUTE_URL", "correct": true},
+      {"id": "b", "text": "UrlGeneratorInterface::ABSOLUTE_PATH", "correct": false},
+      {"id": "c", "text": "UrlGeneratorInterface::FULL_URL", "correct": false},
+      {"id": "d", "text": "UrlGeneratorInterface::SCHEME_AND_HOST", "correct": false}
+    ],
+    "explanation": "ABSOLUTE_URL produces a URL like https://example.com/foo. ABSOLUTE_PATH (the default) returns /foo. NETWORK_PATH returns //example.com/foo, RELATIVE_PATH returns a path relative to the current URL.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#generating-urls"
+  },
+  {
+    "id": "routing-007",
+    "type": "boolean",
+    "question": "By default, when the user requests a path with or without a trailing slash that does not match exactly, Symfony returns a 301 redirect to the correct form (only for GET/HEAD requests).",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Symfony's UrlMatcher is forgiving for safe methods: it issues a 301 to the canonical form to avoid duplicate URLs. For non-GET/HEAD requests it returns the matching route directly to avoid breaking POSTs.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-008",
+    "type": "multiple",
+    "question": "Which of the following are constants exposed by Symfony\\Component\\Routing\\Requirement\\Requirement? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Requirement::DIGITS", "correct": true},
+      {"id": "b", "text": "Requirement::UUID", "correct": true},
+      {"id": "c", "text": "Requirement::POSITIVE_INT", "correct": true},
+      {"id": "d", "text": "Requirement::JSON", "correct": false}
+    ],
+    "explanation": "The Requirement enum/constants helper provides reusable regexes for common needs: DIGITS, POSITIVE_INT, UID_BASE32/UID_BASE58/UID_RFC4122, UUID, ULID, etc. There is no JSON constant — JSON validation is not a routing concern.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#parameters-validation"
+  },
+  {
+    "id": "routing-009",
+    "type": "single",
+    "question": "What does the 'host' option of #[Route] allow you to do?",
+    "answers": [
+      {"id": "a", "text": "Match the route only when the request's hostname matches the given pattern", "correct": true},
+      {"id": "b", "text": "Bind the route to a specific server IP address", "correct": false},
+      {"id": "c", "text": "Force the URL generator to use the given host for absolute URLs", "correct": false},
+      {"id": "d", "text": "Set a vhost name in the web server configuration", "correct": false}
+    ],
+    "explanation": "host restricts a route to requests whose Host header matches the value (which can include placeholders like {subdomain}.example.com with their own requirements). It only filters matching, it does not configure the web server.",
+    "doc_url": "https://symfony.com/doc/current/routing/hostname_pattern.html"
+  },
+  {
+    "id": "routing-010",
+    "type": "single",
+    "question": "What is the meaning of the inline syntax /post/{id<\\d+>} in a Symfony route?",
+    "answers": [
+      {"id": "a", "text": "{id} must match the regular expression \\d+ (digits only)", "correct": true},
+      {"id": "b", "text": "{id} must be a string of length \\d+", "correct": false},
+      {"id": "c", "text": "{id} accepts the literal text 'd+' as value", "correct": false},
+      {"id": "d", "text": "{id} is escaped and treated as a literal segment", "correct": false}
+    ],
+    "explanation": "Symfony supports inline requirements with the {name<regex>} shorthand, equivalent to setting requirements: ['id' => '\\d+']. You can combine with a default: {id<\\d+>?1}.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#parameters-validation"
+  },
+  {
+    "id": "routing-011",
+    "type": "multiple",
+    "question": "Which of the following are valid options on the #[Route] attribute? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "methods", "correct": true},
+      {"id": "b", "text": "schemes", "correct": true},
+      {"id": "c", "text": "priority", "correct": true},
+      {"id": "d", "text": "timeout", "correct": false}
+    ],
+    "explanation": "#[Route] supports path, name, methods, schemes, host, requirements, defaults, options, condition, priority, locale, format, stateless and env. There is no 'timeout' option — request timeouts are handled at the web server or PHP level.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-012",
+    "type": "single",
+    "question": "When does the 'priority' option on a route matter?",
+    "answers": [
+      {"id": "a", "text": "When several routes can match the same URL — higher priority is tried first", "correct": true},
+      {"id": "b", "text": "When the application is under high load — high priority routes are served first", "correct": false},
+      {"id": "c", "text": "When generating URLs — high priority routes are preferred", "correct": false},
+      {"id": "d", "text": "When invalidating the route cache — high priority routes are warmed up first", "correct": false}
+    ],
+    "explanation": "By default, route order in the source determines which one wins on conflicts. priority lets you override this without reordering files: a route with priority 10 is matched before one with priority 0.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#priority-parameter"
+  },
+  {
+    "id": "routing-013",
+    "type": "boolean",
+    "question": "The 'condition' option of #[Route] uses Symfony's ExpressionLanguage and has access to variables like 'context', 'request' and 'env()'.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "condition is evaluated as an ExpressionLanguage expression. It exposes the routing context, the current Request, the matched parameters, and helpers like env() and service() to read env vars and services.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#matching-expressions"
+  },
+  {
+    "id": "routing-014",
+    "type": "single",
+    "question": "How do you define different paths per locale on a single #[Route]?",
+    "answers": [
+      {"id": "a", "text": "Pass the path option as an array, e.g. path: ['en' => '/posts', 'fr' => '/articles']", "correct": true},
+      {"id": "b", "text": "Use the locale option with a comma-separated list of paths", "correct": false},
+      {"id": "c", "text": "Define one route per locale and group them with name_prefix", "correct": false},
+      {"id": "d", "text": "Only YAML routing supports localized paths", "correct": false}
+    ],
+    "explanation": "Symfony's #[Route] accepts an array of locale → path. The matched route automatically sets _locale on the request. Both attribute and YAML routing support this syntax.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
+  },
+  {
+    "id": "routing-015",
+    "type": "single",
+    "question": "What is the effect of marking a route as stateless: true?",
+    "answers": [
+      {"id": "a", "text": "It triggers a deprecation warning if the controller starts a session, helping enforce stateless APIs", "correct": true},
+      {"id": "b", "text": "It disables the session entirely for that request", "correct": false},
+      {"id": "c", "text": "It marks the response as cacheable by shared caches", "correct": false},
+      {"id": "d", "text": "It removes any existing session cookie from the response", "correct": false}
+    ],
+    "explanation": "stateless: true is a contract: it warns (in debug) when a request to that route ends up using the session, which is typically unwanted on stateless APIs. It does not actively disable the session.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-016",
+    "type": "single",
+    "question": "What happens when you set 'schemes: [https]' on a route and the user requests it via http?",
+    "answers": [
+      {"id": "a", "text": "Symfony issues a 301 redirect to the same URL using https", "correct": true},
+      {"id": "b", "text": "Symfony returns a 400 Bad Request", "correct": false},
+      {"id": "c", "text": "The route does not match and a 404 is returned", "correct": false},
+      {"id": "d", "text": "The route matches as long as the URL generator uses https", "correct": false}
+    ],
+    "explanation": "schemes restricts which schemes are valid for matching. When the user requests an HTTP URL while the route requires HTTPS, Symfony redirects (301) to the HTTPS version, leveraging the route's scheme requirement.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-017",
+    "type": "multiple",
+    "question": "Which of the following exceptions can be thrown by the routing matcher? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "ResourceNotFoundException", "correct": true},
+      {"id": "b", "text": "MethodNotAllowedException", "correct": true},
+      {"id": "c", "text": "NoConfigurationException", "correct": true},
+      {"id": "d", "text": "RouteValidationException", "correct": false}
+    ],
+    "explanation": "The matcher throws ResourceNotFoundException (no route matched), MethodNotAllowedException (a route matched but with the wrong HTTP method) and NoConfigurationException (no routes are loaded). RouteValidationException is not part of the routing component.",
+    "doc_url": "https://symfony.com/doc/current/components/routing.html"
+  },
+  {
+    "id": "routing-018",
+    "type": "single",
+    "question": "What does AbstractController::generateUrl('post_show', ['id' => 5]) return by default?",
+    "answers": [
+      {"id": "a", "text": "An absolute path like /posts/5 (no scheme or host)", "correct": true},
+      {"id": "b", "text": "A fully qualified URL like https://example.com/posts/5", "correct": false},
+      {"id": "c", "text": "A relative path computed from the current URL", "correct": false},
+      {"id": "d", "text": "A protocol-relative URL like //example.com/posts/5", "correct": false}
+    ],
+    "explanation": "generateUrl() defaults to UrlGeneratorInterface::ABSOLUTE_PATH (e.g. /posts/5). Pass UrlGeneratorInterface::ABSOLUTE_URL as the third argument to obtain a full URL with scheme and host.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#generating-urls"
+  },
+  {
+    "id": "routing-019",
+    "type": "single",
+    "question": "When does UrlGenerator throw a RouteNotFoundException?",
+    "answers": [
+      {"id": "a", "text": "When the requested route name does not exist in the route collection", "correct": true},
+      {"id": "b", "text": "When the user requests an URL that does not match any route", "correct": false},
+      {"id": "c", "text": "When generating an URL with missing required parameters", "correct": false},
+      {"id": "d", "text": "When the route matches but the HTTP method is wrong", "correct": false}
+    ],
+    "explanation": "RouteNotFoundException is raised by the URL generator when you ask it to generate an URL for an unknown route name. Missing required parameters raise MissingMandatoryParametersException; runtime URL matching uses ResourceNotFoundException.",
+    "doc_url": "https://symfony.com/doc/current/components/routing.html"
+  },
+  {
+    "id": "routing-020",
+    "type": "multiple",
+    "question": "Which of the following 'type' values can be used to import routes in routes.yaml? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "attribute — load from PHP attributes in classes/directories", "correct": true},
+      {"id": "b", "text": "directory — load all supported route files in a directory", "correct": true},
+      {"id": "c", "text": "service — delegate route loading to a service implementing a Loader", "correct": true},
+      {"id": "d", "text": "json — load routes from a JSON file", "correct": false}
+    ],
+    "explanation": "Symfony ships loaders for attribute, directory, file (yaml/php/xml), service and glob. JSON is not a supported routing format out of the box.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-021",
+    "type": "boolean",
+    "question": "Placing #[Route('/admin')] on a controller class prefixes the path of every #[Route] declared on its methods.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "A class-level #[Route] acts as a group: its path, name, host, schemes, methods, etc. are merged with the per-method route configuration. A method route /list combined with class /admin becomes /admin/list.",
+    "doc_url": "https://symfony.com/doc/current/routing.html"
+  },
+  {
+    "id": "routing-022",
+    "type": "single",
+    "question": "What happens to extra parameters passed to generateUrl() that are not defined in the route?",
+    "answers": [
+      {"id": "a", "text": "They are appended to the generated URL as a query string", "correct": true},
+      {"id": "b", "text": "They are silently discarded", "correct": false},
+      {"id": "c", "text": "They cause a MissingMandatoryParametersException", "correct": false},
+      {"id": "d", "text": "They are stored in the session for the next request", "correct": false}
+    ],
+    "explanation": "The URL generator uses defined parameters to fill the path placeholders, then appends any remaining ones as a query string. This makes it easy to add filters or pagination params without redefining the route.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#generating-urls"
+  },
+  {
+    "id": "routing-023",
+    "type": "multiple",
+    "question": "Which variables/functions are available in a route's 'condition' expression? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "request — the current Request object", "correct": true},
+      {"id": "b", "text": "context — the routing RequestContext", "correct": true},
+      {"id": "c", "text": "env() — read an environment variable", "correct": true},
+      {"id": "d", "text": "container — full DI container access", "correct": false}
+    ],
+    "explanation": "Conditions expose 'context', 'request', the matched parameters, plus the helpers env() and service('id'). Direct access to the container is not provided to keep conditions lightweight and predictable.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#matching-expressions"
+  },
+  {
+    "id": "routing-024",
+    "type": "single",
+    "question": "How can you make a route parameter optional and provide a default value?",
+    "answers": [
+      {"id": "a", "text": "Use the 'defaults' option, or provide a default for the corresponding controller argument", "correct": true},
+      {"id": "b", "text": "Wrap the parameter with [brackets] in the path", "correct": false},
+      {"id": "c", "text": "Append a question mark after the route, like /post/{id}?", "correct": false},
+      {"id": "d", "text": "Optional parameters require a custom URL matcher", "correct": false}
+    ],
+    "explanation": "Set a value in the route's defaults (e.g. defaults: ['page' => 1]) or provide a PHP default value for the controller argument (function index(int $page = 1)). The inline shortcut {page<\\d+>?1} also works.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#optional-parameters"
+  },
+  {
+    "id": "routing-025",
+    "type": "single",
+    "question": "What happens when a controller argument is type-hinted with a backed enum and the matching route parameter is provided?",
+    "answers": [
+      {"id": "a", "text": "Symfony's BackedEnumValueResolver converts the string to the enum case automatically", "correct": true},
+      {"id": "b", "text": "The argument receives the raw string and you must cast it manually", "correct": false},
+      {"id": "c", "text": "Symfony throws because backed enums are not allowed in routes", "correct": false},
+      {"id": "d", "text": "The argument is set to null", "correct": false}
+    ],
+    "explanation": "BackedEnumValueResolver converts the route parameter to a case of the enum via from() (or tryFrom() if nullable). If the value does not match any case, an exception is thrown — typically resulting in a 404.",
+    "doc_url": "https://symfony.com/doc/current/controller/value_resolver.html"
+  }
+]

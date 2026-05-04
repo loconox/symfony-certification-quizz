@@ -1,0 +1,52 @@
+[
+  {
+    "id": "misc-001",
+    "type": "single",
+    "question": "In Symfony, what is the purpose of the .env file?",
+    "answers": [
+      {"id": "a", "text": "Define environment variables for local development", "correct": true},
+      {"id": "b", "text": "Configure Symfony services", "correct": false},
+      {"id": "c", "text": "Store application secrets in production", "correct": false},
+      {"id": "d", "text": "Define Composer dependencies", "correct": false}
+    ],
+    "explanation": "The .env file (loaded by Symfony DotEnv component) defines default environment variables for development. In production, real env vars should be set at the OS/server level, not via .env.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-env-files"
+  },
+  {
+    "id": "misc-002",
+    "type": "boolean",
+    "question": "The Symfony Web Debug Toolbar is available in the production environment.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "The Web Debug Toolbar and Web Profiler are only enabled in the 'dev' environment. They are disabled in 'prod' for security and performance reasons.",
+    "doc_url": "https://symfony.com/doc/current/profiler.html"
+  },
+  {
+    "id": "misc-003",
+    "type": "single",
+    "question": "Which Symfony component provides PSR-6 and PSR-16 compliant caching?",
+    "answers": [
+      {"id": "a", "text": "symfony/cache", "correct": true},
+      {"id": "b", "text": "symfony/http-cache", "correct": false},
+      {"id": "c", "text": "symfony/var-cache", "correct": false},
+      {"id": "d", "text": "symfony/stash", "correct": false}
+    ],
+    "explanation": "The symfony/cache component provides adapters for various backends (filesystem, Redis, Memcached, APCu, etc.) with PSR-6 (CacheItemPoolInterface) and PSR-16 (SimpleCache) interfaces.",
+    "doc_url": "https://symfony.com/doc/current/cache.html"
+  },
+  {
+    "id": "misc-004",
+    "type": "multiple",
+    "question": "Which of the following are Symfony deployment best practices? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Run composer install --no-dev in production", "correct": true},
+      {"id": "b", "text": "Run php bin/console cache:clear in production environment", "correct": true},
+      {"id": "c", "text": "Use APP_ENV=prod in production", "correct": true},
+      {"id": "d", "text": "Commit the vendor/ directory to version control", "correct": false}
+    ],
+    "explanation": "Production best practices include: --no-dev for composer, clearing/warming the cache, using APP_ENV=prod. Committing vendor/ is an anti-pattern — use composer install during deployment instead.",
+    "doc_url": "https://symfony.com/doc/current/deployment.html"
+  }
+]

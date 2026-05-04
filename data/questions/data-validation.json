@@ -1,0 +1,317 @@
+[
+  {
+    "id": "validation-001",
+    "type": "single",
+    "question": "Which PHP attribute applies a NotBlank validation constraint to a property in Symfony?",
+    "answers": [
+      {"id": "a", "text": "#[Assert\\NotBlank]", "correct": true},
+      {"id": "b", "text": "#[Validate\\Required]", "correct": false},
+      {"id": "c", "text": "#[Constraint\\NotEmpty]", "correct": false},
+      {"id": "d", "text": "#[Required]", "correct": false}
+    ],
+    "explanation": "Symfony's validation constraints use the Assert namespace. You apply them as PHP attributes: #[Assert\\NotBlank], #[Assert\\Length], #[Assert\\Email], etc.",
+    "doc_url": "https://symfony.com/doc/current/validation.html"
+  },
+  {
+    "id": "validation-002",
+    "type": "boolean",
+    "question": "Symfony's validator can validate plain PHP objects that are not Symfony entities.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "The Validator component works on any PHP object. Constraints can be applied via attributes, YAML, or XML configuration. The object doesn't need to extend any base class.",
+    "doc_url": "https://symfony.com/doc/current/validation.html#the-basics-of-validation"
+  },
+  {
+    "id": "validation-003",
+    "type": "single",
+    "question": "How do you run different validation rules depending on the context (e.g., create vs update)?",
+    "answers": [
+      {"id": "a", "text": "Using validation groups", "correct": true},
+      {"id": "b", "text": "Creating different constraint classes", "correct": false},
+      {"id": "c", "text": "Using separate validator services", "correct": false},
+      {"id": "d", "text": "Using the 'context' option on each constraint", "correct": false}
+    ],
+    "explanation": "Validation groups allow applying different subsets of constraints. You pass group names when calling the validator: $validator->validate($object, null, ['create']) or via form 'validation_groups' option.",
+    "doc_url": "https://symfony.com/doc/current/validation/groups.html"
+  },
+  {
+    "id": "validation-004",
+    "type": "multiple",
+    "question": "Which are valid built-in Symfony validation constraints? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Assert\\Email", "correct": true},
+      {"id": "b", "text": "Assert\\Range", "correct": true},
+      {"id": "c", "text": "Assert\\Url", "correct": true},
+      {"id": "d", "text": "Assert\\PhoneNumber", "correct": false}
+    ],
+    "explanation": "Symfony includes Assert\\Email, Assert\\Range, Assert\\Url, Assert\\Length, Assert\\Regex, etc. Assert\\PhoneNumber is not built-in — it comes from the misd-service/phone-number-bundle package.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints.html"
+  },
+  {
+    "id": "validation-005",
+    "type": "single",
+    "question": "What is the practical difference between Assert\\NotBlank and Assert\\NotNull?",
+    "answers": [
+      {"id": "a", "text": "NotBlank rejects null, empty strings, false and empty arrays; NotNull only rejects null", "correct": true},
+      {"id": "b", "text": "NotBlank only checks strings; NotNull works on any type", "correct": false},
+      {"id": "c", "text": "They are aliases — they validate the same thing", "correct": false},
+      {"id": "d", "text": "NotBlank is for forms, NotNull is for the validator service", "correct": false}
+    ],
+    "explanation": "NotBlank rejects 'falsy' values (null, '', false, [] — and '0' unless allowFalse is set). NotNull only treats null as invalid. Use NotBlank when an empty input is meaningless, NotNull when only the absence is wrong.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints/NotBlank.html"
+  },
+  {
+    "id": "validation-006",
+    "type": "single",
+    "question": "What does $validator->validate($object) return?",
+    "answers": [
+      {"id": "a", "text": "A ConstraintViolationListInterface — empty if the object is valid", "correct": true},
+      {"id": "b", "text": "A boolean true/false", "correct": false},
+      {"id": "c", "text": "It returns nothing and throws an exception on failure", "correct": false},
+      {"id": "d", "text": "An array of error message strings", "correct": false}
+    ],
+    "explanation": "validate() returns a ConstraintViolationList. Iterate over it (or call count()) to inspect failures. An empty list means the object passed validation. Each violation exposes getMessage(), getPropertyPath(), getInvalidValue(), getConstraint().",
+    "doc_url": "https://symfony.com/doc/current/validation.html#using-the-validator-service"
+  },
+  {
+    "id": "validation-007",
+    "type": "boolean",
+    "question": "By default, the validator does NOT cascade into properties holding nested objects — you must mark them with #[Assert\\Valid] (or use #[Assert\\Cascade] at the class level).",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Without Valid/Cascade, only the parent object's constraints are evaluated. Adding #[Assert\\Valid] on a property tells the validator to also evaluate the nested object's metadata; #[Assert\\Cascade] at the class level applies this to every property.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints/Valid.html"
+  },
+  {
+    "id": "validation-008",
+    "type": "multiple",
+    "question": "Which of the following are container/structural validation constraints? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Assert\\All — applies a list of constraints to every element", "correct": true},
+      {"id": "b", "text": "Assert\\Collection — validates keyed array entries with their own constraints", "correct": true},
+      {"id": "c", "text": "Assert\\AtLeastOneOf — succeeds when any of the inner constraints succeeds", "correct": true},
+      {"id": "d", "text": "Assert\\Many — applies several constraints in parallel and returns all failures", "correct": false}
+    ],
+    "explanation": "Symfony provides All, Collection, Sequentially, AtLeastOneOf, Compound, Cascade and Valid. There is no 'Many' constraint — running several constraints on the same value is the default behaviour when listing them.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints.html"
+  },
+  {
+    "id": "validation-009",
+    "type": "single",
+    "question": "How do you implement validation logic that depends on multiple properties of the same object?",
+    "answers": [
+      {"id": "a", "text": "Use a class-level constraint such as Assert\\Callback or Assert\\Expression", "correct": true},
+      {"id": "b", "text": "Stack two property-level constraints on the same property", "correct": false},
+      {"id": "c", "text": "Override the validator service for that class", "correct": false},
+      {"id": "d", "text": "Validate manually and bypass the validator service", "correct": false}
+    ],
+    "explanation": "Assert\\Callback declares a method that receives ExecutionContextInterface and the object, allowing arbitrary multi-property logic. Assert\\Expression evaluates an ExpressionLanguage expression on the object. Both are class-level constraints.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints/Callback.html"
+  },
+  {
+    "id": "validation-010",
+    "type": "single",
+    "question": "When is the 'Default' validation group applied?",
+    "answers": [
+      {"id": "a", "text": "When you call validate() without specifying groups, every constraint without an explicit group runs", "correct": true},
+      {"id": "b", "text": "Default is only used by the form component, not by the validator service", "correct": false},
+      {"id": "c", "text": "Default is reserved and you must always pass it explicitly", "correct": false},
+      {"id": "d", "text": "Default runs only after every other group has run", "correct": false}
+    ],
+    "explanation": "Constraints declared without a 'groups' option implicitly belong to the Default group. Calling validate() without groups validates Default. Pass an array of group names to run a different subset.",
+    "doc_url": "https://symfony.com/doc/current/validation/groups.html"
+  },
+  {
+    "id": "validation-011",
+    "type": "single",
+    "question": "What does #[Assert\\GroupSequence(['User', 'Strict'])] declared on a class do?",
+    "answers": [
+      {"id": "a", "text": "It validates the User group first; only if it succeeds does it move on to Strict", "correct": true},
+      {"id": "b", "text": "It validates User and Strict in parallel and merges the violations", "correct": false},
+      {"id": "c", "text": "It excludes the Strict group from validation", "correct": false},
+      {"id": "d", "text": "It renames the Default group to User, then to Strict", "correct": false}
+    ],
+    "explanation": "GroupSequence runs groups in order, stopping at the first group that produces violations. This is useful to avoid a flood of errors — e.g. ensure NotBlank passes before running expensive Regex/UniqueEntity checks.",
+    "doc_url": "https://symfony.com/doc/current/validation/sequence_provider.html"
+  },
+  {
+    "id": "validation-012",
+    "type": "single",
+    "question": "Which constraint is provided by the Doctrine bridge to enforce uniqueness on a database column?",
+    "answers": [
+      {"id": "a", "text": "#[UniqueEntity('email')] (Symfony\\Bridge\\Doctrine\\Validator\\Constraints\\UniqueEntity)", "correct": true},
+      {"id": "b", "text": "#[Assert\\Unique]", "correct": false},
+      {"id": "c", "text": "#[Assert\\Distinct]", "correct": false},
+      {"id": "d", "text": "#[Assert\\NoDuplicate]", "correct": false}
+    ],
+    "explanation": "UniqueEntity is class-level and queries the entity manager to ensure no other row has the same value(s). Assert\\Unique exists too, but it validates that elements within a collection (array) are not duplicated — a different concern.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints/UniqueEntity.html"
+  },
+  {
+    "id": "validation-013",
+    "type": "boolean",
+    "question": "Validation messages can include placeholders like {{ value }} or {{ limit }} that are interpolated using the violation's parameters.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Both built-in and custom messages can use placeholders. Built-in constraints set them automatically; in custom validators you call $this->context->buildViolation($message)->setParameter('{{ value }}', ...). The translator then interpolates them.",
+    "doc_url": "https://symfony.com/doc/current/validation/translations.html"
+  },
+  {
+    "id": "validation-014",
+    "type": "single",
+    "question": "How do you create a custom validation constraint?",
+    "answers": [
+      {"id": "a", "text": "Extend Constraint and provide a paired ConstraintValidator class implementing validate()", "correct": true},
+      {"id": "b", "text": "Implement the ValidatorInterface directly", "correct": false},
+      {"id": "c", "text": "Add a new method to the existing Validator service", "correct": false},
+      {"id": "d", "text": "Register a callable on the validator.constraints.custom service", "correct": false}
+    ],
+    "explanation": "Convention: a Constraint subclass holds the message and options; a ConstraintValidator subclass (named <Constraint>Validator by default) implements validate($value, Constraint $constraint), calling $this->context->buildViolation()->addViolation() on failure.",
+    "doc_url": "https://symfony.com/doc/current/validation/custom_constraint.html"
+  },
+  {
+    "id": "validation-015",
+    "type": "single",
+    "question": "What does Assert\\Sequentially do compared to listing constraints normally?",
+    "answers": [
+      {"id": "a", "text": "It runs the inner constraints in order and stops at the first violation", "correct": true},
+      {"id": "b", "text": "It runs the inner constraints in parallel for performance", "correct": false},
+      {"id": "c", "text": "It accepts the value if any inner constraint succeeds", "correct": false},
+      {"id": "d", "text": "It treats the inner constraints as a single grouped error message", "correct": false}
+    ],
+    "explanation": "By default, listing several constraints on a property reports all failures. Sequentially short-circuits on the first one — useful when later constraints assume earlier ones (e.g. NotBlank → Length → Regex).",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints/Sequentially.html"
+  },
+  {
+    "id": "validation-016",
+    "type": "single",
+    "question": "What does Assert\\When let you do?",
+    "answers": [
+      {"id": "a", "text": "Apply a set of constraints only when an ExpressionLanguage expression evaluates to true", "correct": true},
+      {"id": "b", "text": "Schedule a constraint to be evaluated only on a specific date", "correct": false},
+      {"id": "c", "text": "Run a constraint asynchronously and report later", "correct": false},
+      {"id": "d", "text": "Add a constraint that only fires after a certain validation group has succeeded", "correct": false}
+    ],
+    "explanation": "Assert\\When wraps conditional constraints: if the expression is true the inner constraints are evaluated, otherwise the (optional) 'otherwise' branch runs. The expression has access to 'this' and 'value'.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints/When.html"
+  },
+  {
+    "id": "validation-017",
+    "type": "multiple",
+    "question": "Which methods are available on a ConstraintViolation? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "getMessage()", "correct": true},
+      {"id": "b", "text": "getPropertyPath()", "correct": true},
+      {"id": "c", "text": "getInvalidValue()", "correct": true},
+      {"id": "d", "text": "getStackTrace()", "correct": false}
+    ],
+    "explanation": "ConstraintViolation exposes getMessage(), getMessageTemplate(), getParameters(), getPropertyPath(), getRoot(), getInvalidValue(), getConstraint(), getCode(). It is not an exception, so there is no getStackTrace().",
+    "doc_url": "https://symfony.com/doc/current/validation.html"
+  },
+  {
+    "id": "validation-018",
+    "type": "boolean",
+    "question": "You can validate raw values directly, e.g. $validator->validate('foo@bar', new Assert\\Email()), without wrapping them in an object.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "validate() accepts any value as its first argument. Pass a single constraint (or an array of constraints) as the second argument to validate scalars or arrays without modeling them in a class.",
+    "doc_url": "https://symfony.com/doc/current/validation/raw_values.html"
+  },
+  {
+    "id": "validation-019",
+    "type": "single",
+    "question": "Which command lists every validation constraint declared on a given class?",
+    "answers": [
+      {"id": "a", "text": "php bin/console debug:validator 'App\\\\Entity\\\\User'", "correct": true},
+      {"id": "b", "text": "php bin/console validator:dump 'App\\\\Entity\\\\User'", "correct": false},
+      {"id": "c", "text": "php bin/console debug:constraints 'App\\\\Entity\\\\User'", "correct": false},
+      {"id": "d", "text": "php bin/console validation:list 'App\\\\Entity\\\\User'", "correct": false}
+    ],
+    "explanation": "debug:validator displays the metadata loaded for a class: per-property constraints, groups, and class-level constraints. Useful to confirm that attributes/YAML/XML are picked up correctly.",
+    "doc_url": "https://symfony.com/doc/current/validation.html"
+  },
+  {
+    "id": "validation-020",
+    "type": "single",
+    "question": "How can you implement a class whose validation group sequence depends on the object's state?",
+    "answers": [
+      {"id": "a", "text": "Use #[Assert\\GroupSequenceProvider] and implement GroupSequenceProviderInterface::getGroupSequence()", "correct": true},
+      {"id": "b", "text": "Override the validator service for that class", "correct": false},
+      {"id": "c", "text": "Pass a closure to validate() as the third argument", "correct": false},
+      {"id": "d", "text": "Use Assert\\GroupSequence with the value 'dynamic'", "correct": false}
+    ],
+    "explanation": "GroupSequenceProvider lets the class itself decide the order at runtime. Mark the class with #[Assert\\GroupSequenceProvider] and implement getGroupSequence() returning a GroupSequence based on the current instance.",
+    "doc_url": "https://symfony.com/doc/current/validation/sequence_provider.html"
+  },
+  {
+    "id": "validation-021",
+    "type": "single",
+    "question": "Which constraint validates that a string matches a regular expression?",
+    "answers": [
+      {"id": "a", "text": "Assert\\Regex", "correct": true},
+      {"id": "b", "text": "Assert\\Pattern", "correct": false},
+      {"id": "c", "text": "Assert\\Match", "correct": false},
+      {"id": "d", "text": "Assert\\PCRE", "correct": false}
+    ],
+    "explanation": "Assert\\Regex takes a 'pattern' option. Use match: false to invert the test (the value must NOT match). Symfony does not have Pattern/Match/PCRE constraints.",
+    "doc_url": "https://symfony.com/doc/current/reference/constraints/Regex.html"
+  },
+  {
+    "id": "validation-022",
+    "type": "multiple",
+    "question": "Which formats can be used to declare validation constraints? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "PHP attributes", "correct": true},
+      {"id": "b", "text": "YAML files", "correct": true},
+      {"id": "c", "text": "XML files", "correct": true},
+      {"id": "d", "text": "JSON files", "correct": false}
+    ],
+    "explanation": "Symfony's metadata loader supports PHP attributes (preferred), YAML, XML and PHP code (loadValidatorMetadata static method). JSON is not supported. You can mix formats — multiple loaders run in sequence.",
+    "doc_url": "https://symfony.com/doc/current/validation.html"
+  },
+  {
+    "id": "validation-023",
+    "type": "boolean",
+    "question": "Inside a custom ConstraintValidator, $this->context->buildViolation('message') returns a builder that lets you set parameters and finally call ->addViolation().",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "ExecutionContext::buildViolation() returns a fluent ConstraintViolationBuilder. You chain ->setParameter(), ->atPath(), ->setCode(), ->setInvalidValue(), and finally ->addViolation() to actually register the violation.",
+    "doc_url": "https://symfony.com/doc/current/validation/custom_constraint.html"
+  },
+  {
+    "id": "validation-024",
+    "type": "single",
+    "question": "What does the 'payload' option on a constraint allow you to do?",
+    "answers": [
+      {"id": "a", "text": "Attach metadata to the violation that you can read later (e.g., a severity flag)", "correct": true},
+      {"id": "b", "text": "Pass extra arguments to the underlying validator's validate() method", "correct": false},
+      {"id": "c", "text": "Skip the constraint based on a feature flag", "correct": false},
+      {"id": "d", "text": "Translate the message into a payload-specific locale", "correct": false}
+    ],
+    "explanation": "payload is purely metadata. The validator stores it on the constraint, and the violation exposes the constraint via getConstraint(). It is commonly used to mark a constraint as warning vs error so the UI can render them differently.",
+    "doc_url": "https://symfony.com/doc/current/validation/severity.html"
+  },
+  {
+    "id": "validation-025",
+    "type": "single",
+    "question": "By default, which translation domain is used for validation error messages?",
+    "answers": [
+      {"id": "a", "text": "validators", "correct": true},
+      {"id": "b", "text": "messages", "correct": false},
+      {"id": "c", "text": "validation", "correct": false},
+      {"id": "d", "text": "errors", "correct": false}
+    ],
+    "explanation": "Validation messages are translated using the 'validators' domain by default. You can override the domain globally with framework.validation.translation_domain or per constraint with the 'translationDomain' option.",
+    "doc_url": "https://symfony.com/doc/current/validation/translations.html"
+  }
+]

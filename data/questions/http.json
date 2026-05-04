@@ -1,0 +1,317 @@
+[
+  {
+    "id": "http-001",
+    "type": "single",
+    "question": "Which HTTP status code indicates that the resource has permanently moved to a new URL?",
+    "answers": [
+      {"id": "a", "text": "301 Moved Permanently", "correct": true},
+      {"id": "b", "text": "302 Found", "correct": false},
+      {"id": "c", "text": "307 Temporary Redirect", "correct": false},
+      {"id": "d", "text": "303 See Other", "correct": false}
+    ],
+    "explanation": "301 Moved Permanently tells clients and search engines that the resource has moved to a new URL permanently. Browsers cache this redirect.",
+    "doc_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301"
+  },
+  {
+    "id": "http-002",
+    "type": "boolean",
+    "question": "HTTP is a stateless protocol, meaning each request is independent and the server retains no memory of previous requests.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "HTTP is stateless by design. State management mechanisms like cookies, sessions, and tokens are layered on top to provide stateful behavior.",
+    "doc_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview"
+  },
+  {
+    "id": "http-003",
+    "type": "multiple",
+    "question": "Which HTTP methods are considered safe (do not modify server state)? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "GET", "correct": true},
+      {"id": "b", "text": "HEAD", "correct": true},
+      {"id": "c", "text": "OPTIONS", "correct": true},
+      {"id": "d", "text": "POST", "correct": false}
+    ],
+    "explanation": "Safe methods (GET, HEAD, OPTIONS) are defined in RFC 9110 as methods that should not have side effects on the server. POST is not safe as it typically creates/modifies resources.",
+    "doc_url": "https://symfony.com/doc/current/http_client.html"
+  },
+  {
+    "id": "http-004",
+    "type": "single",
+    "question": "Which Cache-Control directive tells the browser the response must not be stored in any cache?",
+    "answers": [
+      {"id": "a", "text": "no-store", "correct": true},
+      {"id": "b", "text": "no-cache", "correct": false},
+      {"id": "c", "text": "private", "correct": false},
+      {"id": "d", "text": "must-revalidate", "correct": false}
+    ],
+    "explanation": "no-store prevents the response from being stored anywhere. no-cache allows storage but requires revalidation before each use. private allows browser caching but not shared cache.",
+    "doc_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"
+  },
+  {
+    "id": "http-005",
+    "type": "single",
+    "question": "Which Request method returns an InputBag containing parameters from $_POST or a decoded JSON body, useful for both form submissions and API requests?",
+    "answers": [
+      {"id": "a", "text": "$request->getPayload()", "correct": true},
+      {"id": "b", "text": "$request->getContent()", "correct": false},
+      {"id": "c", "text": "$request->query", "correct": false},
+      {"id": "d", "text": "$request->attributes", "correct": false}
+    ],
+    "explanation": "getPayload() returns parameters from $_POST when the body is form-encoded, or the decoded JSON body otherwise. getContent() returns the raw body string. query is for $_GET parameters. attributes holds internal Symfony data (route params, etc.).",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "http-006",
+    "type": "boolean",
+    "question": "In Symfony, the session is started automatically the first time you read from or write to it.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Sessions in Symfony are lazy: they are only started when you actually access them via $session->get() or $session->set(). This avoids overhead and allows responses to remain cacheable when sessions are not used.",
+    "doc_url": "https://symfony.com/doc/current/session.html"
+  },
+  {
+    "id": "http-007",
+    "type": "multiple",
+    "question": "Which Cookie flags are recommended to harden cookies against XSS, MITM, and CSRF attacks? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "HttpOnly", "correct": true},
+      {"id": "b", "text": "Secure", "correct": true},
+      {"id": "c", "text": "SameSite", "correct": true},
+      {"id": "d", "text": "Persistent", "correct": false}
+    ],
+    "explanation": "HttpOnly prevents JavaScript access (mitigates XSS theft). Secure restricts the cookie to HTTPS (mitigates MITM). SameSite (Lax/Strict/None) controls cross-site sending (mitigates CSRF). 'Persistent' is not a flag — persistence is set by the cookie's expiration date.",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "http-008",
+    "type": "single",
+    "question": "What does JsonResponse do that a plain Response does not?",
+    "answers": [
+      {"id": "a", "text": "Sets Content-Type to application/json and JSON-encodes the data automatically", "correct": true},
+      {"id": "b", "text": "Adds CORS headers automatically", "correct": false},
+      {"id": "c", "text": "Compresses the body with gzip", "correct": false},
+      {"id": "d", "text": "Generates an ETag based on the JSON payload", "correct": false}
+    ],
+    "explanation": "JsonResponse extends Response, calls json_encode() on the provided data, and sets Content-Type to application/json. CORS, compression and ETag are not handled automatically.",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "http-009",
+    "type": "single",
+    "question": "How do flash messages stored in the session behave?",
+    "answers": [
+      {"id": "a", "text": "They are removed automatically the first time they are read with get()", "correct": true},
+      {"id": "b", "text": "They persist until explicitly cleared by the developer", "correct": false},
+      {"id": "c", "text": "They are removed only when the session expires", "correct": false},
+      {"id": "d", "text": "They are stored in the database and read on demand", "correct": false}
+    ],
+    "explanation": "Flash messages are designed for one-shot notifications across redirects. Reading them with $session->getFlashBag()->get() removes them. peek() can be used to read without removing.",
+    "doc_url": "https://symfony.com/doc/current/session.html"
+  },
+  {
+    "id": "http-010",
+    "type": "multiple",
+    "question": "Which of the following are events dispatched by HttpKernel during the request/response lifecycle? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "kernel.request", "correct": true},
+      {"id": "b", "text": "kernel.controller", "correct": true},
+      {"id": "c", "text": "kernel.view", "correct": true},
+      {"id": "d", "text": "kernel.boot", "correct": false}
+    ],
+    "explanation": "HttpKernel dispatches kernel.request, kernel.controller, kernel.controller_arguments, kernel.view, kernel.response, kernel.finish_request, kernel.terminate and kernel.exception. There is no 'kernel.boot' event.",
+    "doc_url": "https://symfony.com/doc/current/components/http_kernel.html"
+  },
+  {
+    "id": "http-011",
+    "type": "boolean",
+    "question": "Once a session is started during a request, the response is automatically marked as private and cannot be cached by shared (HTTP) caches.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Symfony marks responses as private when the session has been started, because the content is potentially user-specific. This prevents shared caches (reverse proxies, CDNs) from serving the same content to other users.",
+    "doc_url": "https://symfony.com/doc/current/http_cache.html"
+  },
+  {
+    "id": "http-012",
+    "type": "single",
+    "question": "Which PHP attribute lets you declare HTTP cache headers directly on a controller action?",
+    "answers": [
+      {"id": "a", "text": "#[Cache]", "correct": true},
+      {"id": "b", "text": "#[HttpCache]", "correct": false},
+      {"id": "c", "text": "#[Cacheable]", "correct": false},
+      {"id": "d", "text": "#[Route(cache: true)]", "correct": false}
+    ],
+    "explanation": "Symfony provides the #[Cache] attribute (Symfony\\Component\\HttpKernel\\Attribute\\Cache) which accepts options like public, maxage, sMaxage, mustRevalidate, etag and lastModified to set HTTP cache headers on the response.",
+    "doc_url": "https://symfony.com/doc/current/http_cache.html"
+  },
+  {
+    "id": "http-013",
+    "type": "multiple",
+    "question": "Which of the following are valid Cache-Control directives defined by HTTP specifications? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "max-age", "correct": true},
+      {"id": "b", "text": "s-maxage", "correct": true},
+      {"id": "c", "text": "must-revalidate", "correct": true},
+      {"id": "d", "text": "store-only", "correct": false}
+    ],
+    "explanation": "max-age applies to all caches, s-maxage applies to shared caches only and overrides max-age for them, must-revalidate forces revalidation once stale. 'store-only' is not a valid directive.",
+    "doc_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"
+  },
+  {
+    "id": "http-014",
+    "type": "single",
+    "question": "Which Response class is best suited to serve a large file efficiently, with built-in support for Range requests and X-Sendfile/X-Accel-Redirect?",
+    "answers": [
+      {"id": "a", "text": "BinaryFileResponse", "correct": true},
+      {"id": "b", "text": "StreamedResponse", "correct": false},
+      {"id": "c", "text": "Response with file_get_contents()", "correct": false},
+      {"id": "d", "text": "JsonResponse", "correct": false}
+    ],
+    "explanation": "BinaryFileResponse is designed to serve files: it handles partial downloads via Range headers and can delegate to the web server via X-Sendfile/X-Accel-Redirect. StreamedResponse is for streaming generated content, not static files.",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "http-015",
+    "type": "single",
+    "question": "What is the purpose of the RequestStack service?",
+    "answers": [
+      {"id": "a", "text": "To provide access to the current Request (and any parent requests in sub-request scenarios) from any service", "correct": true},
+      {"id": "b", "text": "To queue HTTP requests sent to external APIs", "correct": false},
+      {"id": "c", "text": "To store all requests received during the application's lifetime for debugging", "correct": false},
+      {"id": "d", "text": "To replay failed requests after a deployment", "correct": false}
+    ],
+    "explanation": "RequestStack lets services retrieve the current Request via getCurrentRequest() without injecting it directly. It also keeps the chain of parent requests when sub-requests are dispatched (e.g. via render()).",
+    "doc_url": "https://symfony.com/doc/current/service_container/request.html"
+  },
+  {
+    "id": "http-016",
+    "type": "single",
+    "question": "How does Request::isXmlHttpRequest() detect that a request is an AJAX call?",
+    "answers": [
+      {"id": "a", "text": "It checks the X-Requested-With header for the value 'XMLHttpRequest'", "correct": true},
+      {"id": "b", "text": "It inspects the Accept header for application/json", "correct": false},
+      {"id": "c", "text": "It looks at the User-Agent string", "correct": false},
+      {"id": "d", "text": "It checks if the URL ends with .json", "correct": false}
+    ],
+    "explanation": "isXmlHttpRequest() relies on the X-Requested-With header set by most JavaScript libraries (jQuery, Axios with config) to the value 'XMLHttpRequest'. Modern fetch() calls do not send this header by default — you must add it manually.",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "http-017",
+    "type": "boolean",
+    "question": "The kernel.terminate event is dispatched after the response has been sent to the client, allowing slow tasks (like sending an email) to run without delaying the user.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "kernel.terminate runs after Response::send() has returned, so the user has already received the response. It is ideal for tasks that should not block the response (logging, async-like work). It only runs when the kernel's terminate() method is called from the front controller.",
+    "doc_url": "https://symfony.com/doc/current/components/http_kernel.html"
+  },
+  {
+    "id": "http-018",
+    "type": "single",
+    "question": "What is the main benefit of StreamedJsonResponse compared to JsonResponse for very large datasets?",
+    "answers": [
+      {"id": "a", "text": "It streams the JSON output via PHP generators, keeping memory usage low", "correct": true},
+      {"id": "b", "text": "It compresses the output with gzip automatically", "correct": false},
+      {"id": "c", "text": "It uses a faster JSON encoder than json_encode", "correct": false},
+      {"id": "d", "text": "It caches the output to disk before sending it", "correct": false}
+    ],
+    "explanation": "StreamedJsonResponse uses generators to encode and stream JSON chunks progressively, instead of building the whole structure in memory. This is essential when serializing very large collections.",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "http-019",
+    "type": "multiple",
+    "question": "Which values are valid for the SameSite cookie attribute? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Lax", "correct": true},
+      {"id": "b", "text": "Strict", "correct": true},
+      {"id": "c", "text": "None", "correct": true},
+      {"id": "d", "text": "Cross", "correct": false}
+    ],
+    "explanation": "The SameSite attribute supports three values: Lax (default in modern browsers, allows top-level navigations), Strict (no cross-site sending at all), and None (must be combined with Secure to send cross-site). 'Cross' is not a valid value.",
+    "doc_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite"
+  },
+  {
+    "id": "http-020",
+    "type": "single",
+    "question": "When a client sends an If-None-Match header and the server's ETag matches, which HTTP status code should the response have?",
+    "answers": [
+      {"id": "a", "text": "304 Not Modified", "correct": true},
+      {"id": "b", "text": "200 OK with empty body", "correct": false},
+      {"id": "c", "text": "412 Precondition Failed", "correct": false},
+      {"id": "d", "text": "204 No Content", "correct": false}
+    ],
+    "explanation": "When the ETag matches, the resource has not changed: the server returns 304 Not Modified with no body, telling the client to reuse its cached copy. Symfony's Response::isNotModified($request) handles this automatically.",
+    "doc_url": "https://symfony.com/doc/current/http_cache/validation.html"
+  },
+  {
+    "id": "http-021",
+    "type": "boolean",
+    "question": "The s-maxage Cache-Control directive overrides max-age, but only for shared (proxy) caches.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "s-maxage targets shared caches (reverse proxies, CDNs) and takes precedence over max-age for them. Browsers (private caches) ignore s-maxage and use max-age. This lets you have different freshness windows for proxies and end users.",
+    "doc_url": "https://symfony.com/doc/current/http_cache.html"
+  },
+  {
+    "id": "http-022",
+    "type": "multiple",
+    "question": "Which session storage handlers ship with Symfony out of the box? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "NativeFileSessionHandler", "correct": true},
+      {"id": "b", "text": "PdoSessionHandler", "correct": true},
+      {"id": "c", "text": "RedisSessionHandler", "correct": true},
+      {"id": "d", "text": "FtpSessionHandler", "correct": false}
+    ],
+    "explanation": "Symfony ships with handlers for native file storage (default), PDO (databases), Redis, Memcached and MongoDB. There is no FtpSessionHandler — sessions over FTP would not make sense.",
+    "doc_url": "https://symfony.com/doc/current/session/database.html"
+  },
+  {
+    "id": "http-023",
+    "type": "single",
+    "question": "What is the purpose of ESI (Edge Side Includes) in Symfony's HTTP cache?",
+    "answers": [
+      {"id": "a", "text": "To cache different fragments of a page with different TTLs and assemble them at the gateway", "correct": true},
+      {"id": "b", "text": "To encrypt cached responses at the edge", "correct": false},
+      {"id": "c", "text": "To compress responses using Brotli before storing them", "correct": false},
+      {"id": "d", "text": "To geographically replicate cache entries across servers", "correct": false}
+    ],
+    "explanation": "ESI lets you split a page into independently cacheable fragments. A reverse proxy (Symfony's, Varnish) replaces <esi:include> tags with the actual fragment, each having its own freshness rules. This is ideal for pages that mix highly cacheable and dynamic parts.",
+    "doc_url": "https://symfony.com/doc/current/http_cache/esi.html"
+  },
+  {
+    "id": "http-024",
+    "type": "single",
+    "question": "What is the default HTTP status code returned by RedirectResponse when no status is specified?",
+    "answers": [
+      {"id": "a", "text": "302 Found", "correct": true},
+      {"id": "b", "text": "301 Moved Permanently", "correct": false},
+      {"id": "c", "text": "303 See Other", "correct": false},
+      {"id": "d", "text": "307 Temporary Redirect", "correct": false}
+    ],
+    "explanation": "RedirectResponse defaults to 302 Found (a temporary redirect). For permanent redirects, pass 301 explicitly. Choose 303 See Other after a POST to force a GET on the new location, and 307/308 to preserve the original method.",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "http-025",
+    "type": "multiple",
+    "question": "What can a listener on the kernel.view event do? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Convert a non-Response value returned by the controller into a Response", "correct": true},
+      {"id": "b", "text": "Serialize an object returned by the controller into JSON or XML", "correct": true},
+      {"id": "c", "text": "Render a Twig template based on the controller's return value", "correct": true},
+      {"id": "d", "text": "Authenticate the user before the controller runs", "correct": false}
+    ],
+    "explanation": "kernel.view fires only when the controller returns something other than a Response. Listeners use this to transform the return value (array, object, etc.) into a Response — for example, the SensioFrameworkExtraBundle/Symfony Twig integration uses it for #[Template]. Authentication runs much earlier, on kernel.request.",
+    "doc_url": "https://symfony.com/doc/current/components/http_kernel.html"
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "tests-001",
+    "type": "single",
+    "question": "In Symfony functional tests, which class provides a browser-like HTTP client to make requests?",
+    "answers": [
+      {"id": "a", "text": "Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase (via createClient())", "correct": true},
+      {"id": "b", "text": "Symfony\\Component\\HttpClient\\HttpClient", "correct": false},
+      {"id": "c", "text": "PHPUnit\\Framework\\TestCase with Guzzle", "correct": false},
+      {"id": "d", "text": "Symfony\\Component\\BrowserKit\\Browser", "correct": false}
+    ],
+    "explanation": "WebTestCase::createClient() returns a KernelBrowser that simulates HTTP requests within the Symfony kernel, without an actual HTTP server. It gives access to the Crawler for DOM assertions.",
+    "doc_url": "https://symfony.com/doc/current/testing.html#functional-tests"
+  },
+  {
+    "id": "tests-002",
+    "type": "boolean",
+    "question": "Symfony's Crawler object (from DomCrawler component) can execute JavaScript.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "The DomCrawler Crawler is a PHP DOM parser — it cannot execute JavaScript. For JS testing, you need tools like Panther (which drives a real browser like Chrome).",
+    "doc_url": "https://symfony.com/doc/current/components/dom_crawler.html"
+  },
+  {
+    "id": "tests-003",
+    "type": "single",
+    "question": "Which PHPUnit assertion checks that a Symfony response returns a 200 status code?",
+    "answers": [
+      {"id": "a", "text": "$this->assertResponseIsSuccessful()", "correct": true},
+      {"id": "b", "text": "$this->assertEquals(200, $response->getStatusCode())", "correct": false},
+      {"id": "c", "text": "$this->assertStatusCode(200, $client)", "correct": false},
+      {"id": "d", "text": "$this->assertHttpOk($response)", "correct": false}
+    ],
+    "explanation": "WebTestCase provides Symfony-specific assertions like assertResponseIsSuccessful() (2xx codes), assertResponseStatusCodeSame(200), assertSelectorTextContains(), etc.",
+    "doc_url": "https://symfony.com/doc/current/testing.html#testing-the-response"
+  },
+  {
+    "id": "tests-004",
+    "type": "multiple",
+    "question": "Which of the following test types are supported in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Unit tests (isolated class testing)", "correct": true},
+      {"id": "b", "text": "Functional tests (kernel request/response cycle)", "correct": true},
+      {"id": "c", "text": "Integration tests (partial container boot)", "correct": true},
+      {"id": "d", "text": "Contract tests (built-in Symfony feature)", "correct": false}
+    ],
+    "explanation": "Symfony officially supports unit, functional, and integration tests. Contract testing is a concept (e.g., Pact) not built into Symfony's test infrastructure.",
+    "doc_url": "https://symfony.com/doc/current/testing.html"
+  }
+]

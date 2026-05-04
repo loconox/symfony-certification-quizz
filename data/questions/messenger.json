@@ -1,0 +1,52 @@
+[
+  {
+    "id": "messenger-001",
+    "type": "single",
+    "question": "In Symfony Messenger, what is a message handler?",
+    "answers": [
+      {"id": "a", "text": "A class with an __invoke() method that processes a specific message type", "correct": true},
+      {"id": "b", "text": "A Symfony service tagged with 'messenger.bus'", "correct": false},
+      {"id": "c", "text": "An event subscriber for asynchronous events", "correct": false},
+      {"id": "d", "text": "A middleware that intercepts all messages", "correct": false}
+    ],
+    "explanation": "A message handler is a class with __invoke(MessageType $message) attributed with #[AsMessageHandler]. Symfony auto-discovers handlers based on their type hints.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#creating-a-message-handler"
+  },
+  {
+    "id": "messenger-002",
+    "type": "boolean",
+    "question": "Symfony Messenger can process messages synchronously (in the same request) and asynchronously (via a transport).",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Without a transport configured, Messenger handles messages synchronously. With a transport (AMQP, Redis, Doctrine, etc.), messages are dispatched to a queue and processed by workers asynchronously.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#transports-async-queued-messages"
+  },
+  {
+    "id": "messenger-003",
+    "type": "single",
+    "question": "Which command starts a Messenger worker that consumes messages from a transport?",
+    "answers": [
+      {"id": "a", "text": "php bin/console messenger:consume", "correct": true},
+      {"id": "b", "text": "php bin/console messenger:worker:start", "correct": false},
+      {"id": "c", "text": "php bin/console messenger:queue:process", "correct": false},
+      {"id": "d", "text": "php bin/console queue:consume", "correct": false}
+    ],
+    "explanation": "The 'messenger:consume' command starts a long-running worker process that pulls messages from the specified transport(s) and dispatches them to handlers.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker"
+  },
+  {
+    "id": "messenger-004",
+    "type": "multiple",
+    "question": "Which are valid Messenger transport types in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "AMQP (RabbitMQ)", "correct": true},
+      {"id": "b", "text": "Redis", "correct": true},
+      {"id": "c", "text": "Doctrine (database queue)", "correct": true},
+      {"id": "d", "text": "Kafka (built-in)", "correct": false}
+    ],
+    "explanation": "Built-in transports include AMQP, Redis, Doctrine, and In-memory. Kafka requires a third-party package. The in-memory transport is for testing.",
+    "doc_url": "https://symfony.com/doc/current/messenger.html#transport-configuration"
+  }
+]

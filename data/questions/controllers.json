@@ -1,0 +1,319 @@
+[
+  {
+    "id": "controllers-001",
+    "type": "single",
+    "question": "Which method of AbstractController should you call to generate a 404 Not Found exception?",
+    "answers": [
+      {"id": "a", "text": "$this->createNotFoundException()", "correct": true},
+      {"id": "b", "text": "$this->throw404()", "correct": false},
+      {"id": "c", "text": "throw new HttpException(404)", "correct": false},
+      {"id": "d", "text": "$this->notFound()", "correct": false}
+    ],
+    "explanation": "AbstractController provides createNotFoundException() which creates a NotFoundHttpException. You then throw it: throw $this->createNotFoundException('Resource not found').",
+    "doc_url": "https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages"
+  },
+  {
+    "id": "controllers-002",
+    "type": "boolean",
+    "question": "Flash messages in Symfony persist across multiple requests until they are displayed.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Flash messages are consumed (removed) as soon as they are displayed. They persist only until the next request where they are read — typically the request after a redirect.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#flash-messages"
+  },
+  {
+    "id": "controllers-003",
+    "type": "single",
+    "question": "Which argument value resolver automatically provides the currently authenticated user to a controller action?",
+    "answers": [
+      {"id": "a", "text": "#[CurrentUser] attribute on the parameter", "correct": true},
+      {"id": "b", "text": "$this->getUser() called in the controller", "correct": false},
+      {"id": "c", "text": "SecurityContext injection", "correct": false},
+      {"id": "d", "text": "UserInterface type-hinting without attribute", "correct": false}
+    ],
+    "explanation": "The #[CurrentUser] attribute on a controller argument triggers the CurrentUserValueResolver to inject the authenticated user. $this->getUser() also works but is not an argument resolver.",
+    "doc_url": "https://symfony.com/doc/current/security.html#fetching-the-user-object"
+  },
+  {
+    "id": "controllers-004",
+    "type": "multiple",
+    "question": "Which of the following are available via AbstractController? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "render()", "correct": true},
+      {"id": "b", "text": "redirectToRoute()", "correct": true},
+      {"id": "c", "text": "generateUrl()", "correct": true},
+      {"id": "d", "text": "persist()", "correct": false}
+    ],
+    "explanation": "AbstractController provides render(), redirectToRoute(), generateUrl(), json(), denyAccessUnlessGranted() and more. persist() is a Doctrine EntityManager method, not part of AbstractController.",
+    "doc_url": "https://symfony.com/doc/current/controller.html"
+  },
+  {
+    "id": "controllers-005",
+    "type": "single",
+    "question": "What does $this->forward() do in an AbstractController?",
+    "answers": [
+      {"id": "a", "text": "It triggers an internal sub-request to another controller and returns its Response", "correct": true},
+      {"id": "b", "text": "It sends an HTTP redirect to another controller's URL", "correct": false},
+      {"id": "c", "text": "It schedules another controller to run on the next request", "correct": false},
+      {"id": "d", "text": "It includes the rendered output of another controller as a string", "correct": false}
+    ],
+    "explanation": "forward() executes a sub-request internally without sending an HTTP redirect. The browser URL stays the same. The target controller's Response is returned to the caller, which can use it as its own response.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#forwarding-to-another-controller"
+  },
+  {
+    "id": "controllers-006",
+    "type": "single",
+    "question": "What is the purpose of the #[MapEntity] attribute on a controller argument?",
+    "answers": [
+      {"id": "a", "text": "It instructs Symfony to fetch a Doctrine entity matching the route parameters and inject it", "correct": true},
+      {"id": "b", "text": "It maps a database column to a controller argument name", "correct": false},
+      {"id": "c", "text": "It registers the entity class as a service in the container", "correct": false},
+      {"id": "d", "text": "It serializes the entity into the response body", "correct": false}
+    ],
+    "explanation": "#[MapEntity] uses the route parameters (e.g. {id}, {slug}) to query the entity manager and inject the corresponding entity. Since Symfony 8.0, automatic entity injection requires this attribute or an explicit mapping — it is no longer fully implicit.",
+    "doc_url": "https://symfony.com/doc/current/doctrine.html#fetch-automatically"
+  },
+  {
+    "id": "controllers-007",
+    "type": "boolean",
+    "question": "A controller can be a class with a single __invoke() method, routed directly on the class itself.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Invokable controllers are fully supported: place #[Route] on the class (or define the route with the class FQCN as controller) and implement __invoke(). They get the same dependency injection and value resolvers as regular controllers.",
+    "doc_url": "https://symfony.com/doc/current/controller.html"
+  },
+  {
+    "id": "controllers-008",
+    "type": "single",
+    "question": "By default, what HTTP status code does Symfony return when validation fails on an argument decorated with #[MapRequestPayload]?",
+    "answers": [
+      {"id": "a", "text": "422 Unprocessable Entity", "correct": true},
+      {"id": "b", "text": "400 Bad Request", "correct": false},
+      {"id": "c", "text": "404 Not Found", "correct": false},
+      {"id": "d", "text": "500 Internal Server Error", "correct": false}
+    ],
+    "explanation": "MapRequestPayload defaults to 422 (Unprocessable Entity), the conventional code for syntactically valid but semantically invalid payloads. MapQueryString defaults to 404. Both can be customized via the validationFailedStatusCode argument.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#mapping-request-data-to-typed-objects"
+  },
+  {
+    "id": "controllers-009",
+    "type": "multiple",
+    "question": "Which of the following are built-in argument value resolvers in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "RequestValueResolver", "correct": true},
+      {"id": "b", "text": "DateTimeValueResolver", "correct": true},
+      {"id": "c", "text": "BackedEnumValueResolver", "correct": true},
+      {"id": "d", "text": "ResponseValueResolver", "correct": false}
+    ],
+    "explanation": "Symfony ships several value resolvers: Request, Session, Service, DateTime, BackedEnum, Uid, RequestAttribute, DefaultValue, CurrentUser, etc. There is no ResponseValueResolver — controllers produce responses, they don't receive them as arguments.",
+    "doc_url": "https://symfony.com/doc/current/controller/value_resolver.html"
+  },
+  {
+    "id": "controllers-010",
+    "type": "single",
+    "question": "What does the #[AsController] attribute do?",
+    "answers": [
+      {"id": "a", "text": "It tags the class with controller.service_arguments so it benefits from controller-style argument resolution", "correct": true},
+      {"id": "b", "text": "It registers a default route based on the class name", "correct": false},
+      {"id": "c", "text": "It marks the class as the application's main entry controller", "correct": false},
+      {"id": "d", "text": "It enables CSRF protection for all actions of the class", "correct": false}
+    ],
+    "explanation": "#[AsController] applies the controller.service_arguments tag, allowing the class to receive type-hinted services and use value resolvers. It is implicit when #[Route] is present, but useful for invokable services without routes.",
+    "doc_url": "https://symfony.com/doc/current/controller/service.html"
+  },
+  {
+    "id": "controllers-011",
+    "type": "single",
+    "question": "What does $this->file('/path/to/document.pdf') return in an AbstractController?",
+    "answers": [
+      {"id": "a", "text": "A BinaryFileResponse that streams the file with the appropriate Content-Disposition", "correct": true},
+      {"id": "b", "text": "The raw contents of the file as a string", "correct": false},
+      {"id": "c", "text": "An SplFileInfo object", "correct": false},
+      {"id": "d", "text": "A path string to be embedded in the response", "correct": false}
+    ],
+    "explanation": "$this->file() builds a BinaryFileResponse with a sensible Content-Disposition header (attachment by default). The web server streams the file efficiently, and Range requests are supported automatically.",
+    "doc_url": "https://symfony.com/doc/current/controller.html"
+  },
+  {
+    "id": "controllers-012",
+    "type": "boolean",
+    "question": "By default, a non-nullable #[CurrentUser] argument throws an AccessDeniedException if no user is authenticated.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "When the controller argument is type-hinted with a User class (non-nullable), the CurrentUser resolver requires an authenticated user. Otherwise it throws an AccessDeniedException, which the firewall typically converts into a 401 or 403 response.",
+    "doc_url": "https://symfony.com/doc/current/security.html"
+  },
+  {
+    "id": "controllers-013",
+    "type": "single",
+    "question": "What is the purpose of placing the #[Cache] attribute on a controller action?",
+    "answers": [
+      {"id": "a", "text": "To set HTTP cache headers (max-age, public/private, ETag…) on the response", "correct": true},
+      {"id": "b", "text": "To cache the result of the action in APCu between requests", "correct": false},
+      {"id": "c", "text": "To enable caching of the rendered Twig template", "correct": false},
+      {"id": "d", "text": "To cache the result of database queries used inside the action", "correct": false}
+    ],
+    "explanation": "#[Cache] (Symfony\\Component\\HttpKernel\\Attribute\\Cache) configures HTTP caching headers on the Response so reverse proxies and browsers can cache it. It does not cache the controller's logic or database queries.",
+    "doc_url": "https://symfony.com/doc/current/http_cache.html"
+  },
+  {
+    "id": "controllers-014",
+    "type": "multiple",
+    "question": "Which of the following helpers are provided by AbstractController? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "createForm()", "correct": true},
+      {"id": "b", "text": "addFlash()", "correct": true},
+      {"id": "c", "text": "denyAccessUnlessGranted()", "correct": true},
+      {"id": "d", "text": "validate()", "correct": false}
+    ],
+    "explanation": "AbstractController exposes a curated set of helpers: render(), redirectToRoute(), json(), file(), forward(), createForm(), addFlash(), denyAccessUnlessGranted(), isGranted(), getUser(), generateUrl(), getParameter(), createNotFoundException(), createAccessDeniedException(). It does not expose validate() — inject the Validator service directly.",
+    "doc_url": "https://symfony.com/doc/current/controller.html"
+  },
+  {
+    "id": "controllers-015",
+    "type": "single",
+    "question": "How do you receive the current Request object in a controller action?",
+    "answers": [
+      {"id": "a", "text": "Type-hint it as a parameter: public function index(Request $request)", "correct": true},
+      {"id": "b", "text": "Call $this->getRequest() inside the action", "correct": false},
+      {"id": "c", "text": "Use the global $_REQUEST variable", "correct": false},
+      {"id": "d", "text": "Read it from the kernel.request event", "correct": false}
+    ],
+    "explanation": "RequestValueResolver injects the Request automatically when the parameter is type-hinted with Symfony\\Component\\HttpFoundation\\Request. There is no $this->getRequest() helper — older versions had it but it was removed.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#the-request-object-as-a-controller-argument"
+  },
+  {
+    "id": "controllers-016",
+    "type": "single",
+    "question": "How do you generate a URL for a named route from a controller?",
+    "answers": [
+      {"id": "a", "text": "$this->generateUrl('route_name', ['id' => 42])", "correct": true},
+      {"id": "b", "text": "$this->urlFor('route_name', ['id' => 42])", "correct": false},
+      {"id": "c", "text": "Router::url('route_name', ['id' => 42])", "correct": false},
+      {"id": "d", "text": "$this->route('route_name', ['id' => 42])", "correct": false}
+    ],
+    "explanation": "AbstractController's generateUrl() delegates to the UrlGeneratorInterface. By default it returns a path; pass UrlGeneratorInterface::ABSOLUTE_URL as a 3rd argument for an absolute URL.",
+    "doc_url": "https://symfony.com/doc/current/routing.html#generating-urls"
+  },
+  {
+    "id": "controllers-017",
+    "type": "single",
+    "question": "What is the recommended way to deny access in a controller when the user lacks a required role?",
+    "answers": [
+      {"id": "a", "text": "$this->denyAccessUnlessGranted('ROLE_ADMIN')", "correct": true},
+      {"id": "b", "text": "throw new \\Exception('Forbidden', 403)", "correct": false},
+      {"id": "c", "text": "return new Response('', 403)", "correct": false},
+      {"id": "d", "text": "die('forbidden')", "correct": false}
+    ],
+    "explanation": "denyAccessUnlessGranted() throws an AccessDeniedException, which Symfony's firewall converts into a 403 (or 401 if anonymous) and triggers the access denied handler. Returning a manual 403 bypasses Security's logic.",
+    "doc_url": "https://symfony.com/doc/current/security.html"
+  },
+  {
+    "id": "controllers-018",
+    "type": "multiple",
+    "question": "Which Request bag(s)/method(s) can a controller use to access incoming data? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "$request->query for query string parameters", "correct": true},
+      {"id": "b", "text": "$request->getPayload() for form-encoded body or JSON body", "correct": true},
+      {"id": "c", "text": "$request->files for uploaded files", "correct": true},
+      {"id": "d", "text": "$request->raw for raw GET data", "correct": false}
+    ],
+    "explanation": "Request exposes ParameterBag/InputBag for query, request (form-encoded $_POST), cookies, files, headers, attributes, server. getPayload() returns POST or decoded JSON body. There is no 'raw' bag — use $request->getContent() for the raw body string.",
+    "doc_url": "https://symfony.com/doc/current/components/http_foundation.html"
+  },
+  {
+    "id": "controllers-019",
+    "type": "single",
+    "question": "When validation fails on an argument decorated with #[MapQueryString], what HTTP status code does Symfony return by default?",
+    "answers": [
+      {"id": "a", "text": "404 Not Found", "correct": true},
+      {"id": "b", "text": "422 Unprocessable Entity", "correct": false},
+      {"id": "c", "text": "400 Bad Request", "correct": false},
+      {"id": "d", "text": "200 OK with errors in the body", "correct": false}
+    ],
+    "explanation": "MapQueryString defaults to 404 because invalid query parameters typically mean the resource cannot be located. MapRequestPayload defaults to 422 because the body is being validated. Both can be overridden via validationFailedStatusCode.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#mapping-request-data-to-typed-objects"
+  },
+  {
+    "id": "controllers-020",
+    "type": "boolean",
+    "question": "A controller must extend AbstractController in order to receive type-hinted services and the Request object as arguments.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Argument injection works for any controller as long as it has the controller.service_arguments tag (applied automatically by #[Route] or #[AsController]). Extending AbstractController only adds convenience helpers like render(), redirectToRoute(), etc.",
+    "doc_url": "https://symfony.com/doc/current/controller/service.html"
+  },
+  {
+    "id": "controllers-021",
+    "type": "single",
+    "question": "How do you set a flash message that will be displayed on the next request?",
+    "answers": [
+      {"id": "a", "text": "$this->addFlash('success', 'Saved!')", "correct": true},
+      {"id": "b", "text": "$this->setFlash('success', 'Saved!')", "correct": false},
+      {"id": "c", "text": "$session->flash('success', 'Saved!')", "correct": false},
+      {"id": "d", "text": "$this->flash('success', 'Saved!')", "correct": false}
+    ],
+    "explanation": "AbstractController::addFlash() pushes a message into the session's flash bag under a given key (e.g. 'success', 'error'). Templates read it once via app.flashes(), after which it is removed.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#flash-messages"
+  },
+  {
+    "id": "controllers-022",
+    "type": "single",
+    "question": "What is the key difference between $this->forward() and $this->redirectToRoute()?",
+    "answers": [
+      {"id": "a", "text": "forward() runs another controller internally; redirectToRoute() sends an HTTP redirect to the client", "correct": true},
+      {"id": "b", "text": "forward() requires a route name; redirectToRoute() requires a controller class", "correct": false},
+      {"id": "c", "text": "They are aliases for the same operation", "correct": false},
+      {"id": "d", "text": "forward() is asynchronous; redirectToRoute() is synchronous", "correct": false}
+    ],
+    "explanation": "forward() executes a sub-request server-side and the URL in the browser does not change. redirectToRoute() returns a 3xx response to the client which causes the browser to make a new request to the target URL.",
+    "doc_url": "https://symfony.com/doc/current/controller.html"
+  },
+  {
+    "id": "controllers-023",
+    "type": "multiple",
+    "question": "Which of the following can be returned from a controller and successfully sent to the client? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "A Response (or any subclass like JsonResponse, RedirectResponse)", "correct": true},
+      {"id": "b", "text": "A non-Response value, if a kernel.view listener converts it", "correct": true},
+      {"id": "c", "text": "A StreamedResponse callback that writes to the output", "correct": true},
+      {"id": "d", "text": "A raw PHP echo statement before returning null", "correct": false}
+    ],
+    "explanation": "Symfony expects a Response, but kernel.view fires when something else is returned, allowing listeners to convert it (e.g. arrays into JsonResponse via the Serializer). Echoing directly bypasses Symfony's response handling and breaks the lifecycle.",
+    "doc_url": "https://symfony.com/doc/current/components/http_kernel.html"
+  },
+  {
+    "id": "controllers-024",
+    "type": "single",
+    "question": "Where do you place a custom error template for HTTP 404 errors when using the TwigBundle exception controller?",
+    "answers": [
+      {"id": "a", "text": "templates/bundles/TwigBundle/Exception/error404.html.twig", "correct": true},
+      {"id": "b", "text": "templates/errors/404.html.twig", "correct": false},
+      {"id": "c", "text": "templates/exceptions/error404.twig", "correct": false},
+      {"id": "d", "text": "config/packages/twig/error_pages.yaml", "correct": false}
+    ],
+    "explanation": "TwigBundle looks for templates/bundles/TwigBundle/Exception/error{code}.html.twig (e.g. error404.html.twig) for status-specific pages, and falls back to error.html.twig. This template path is the conventional override location for any bundle template.",
+    "doc_url": "https://symfony.com/doc/current/controller/error_pages.html"
+  },
+  {
+    "id": "controllers-025",
+    "type": "single",
+    "question": "What does the #[MapUploadedFile] attribute do on a controller argument?",
+    "answers": [
+      {"id": "a", "text": "It injects the uploaded file from $request->files into the argument with optional validation constraints", "correct": true},
+      {"id": "b", "text": "It moves the uploaded file to a target directory automatically", "correct": false},
+      {"id": "c", "text": "It validates that the file MIME type matches the controller's #[Route] requirement", "correct": false},
+      {"id": "d", "text": "It generates a public URL for the uploaded file", "correct": false}
+    ],
+    "explanation": "MapUploadedFile resolves the UploadedFile instance from the request's file bag and applies any validation constraints (File, Image, mimeTypes). It does not move the file — that remains the developer's responsibility.",
+    "doc_url": "https://symfony.com/doc/current/controller.html#mapping-request-data-to-typed-objects"
+  }
+]

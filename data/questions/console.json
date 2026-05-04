@@ -1,0 +1,52 @@
+[
+  {
+    "id": "console-001",
+    "type": "single",
+    "question": "Which attribute registers a class as a Symfony console command?",
+    "answers": [
+      {"id": "a", "text": "#[AsCommand(name: 'app:my-command')]", "correct": true},
+      {"id": "b", "text": "#[Command('app:my-command')]", "correct": false},
+      {"id": "c", "text": "#[ConsoleCommand(name: 'app:my-command')]", "correct": false},
+      {"id": "d", "text": "Extending Command and calling setName() in configure()", "correct": false}
+    ],
+    "explanation": "The #[AsCommand] attribute (Symfony 5.3+) is the modern way to register commands. The class still typically extends Command, but the attribute handles the service tag automatically.",
+    "doc_url": "https://symfony.com/doc/current/console.html#creating-a-command"
+  },
+  {
+    "id": "console-002",
+    "type": "boolean",
+    "question": "Symfony console commands can receive arguments and options from the command line.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Commands define arguments (required/optional positional parameters) and options (prefixed with --) in their configure() method or via the #[Argument] and #[Option] attributes.",
+    "doc_url": "https://symfony.com/doc/current/console/input.html"
+  },
+  {
+    "id": "console-003",
+    "type": "single",
+    "question": "Which verbosity level makes a Symfony command output the most detailed information?",
+    "answers": [
+      {"id": "a", "text": "OutputInterface::VERBOSITY_DEBUG (-vvv)", "correct": true},
+      {"id": "b", "text": "OutputInterface::VERBOSITY_VERY_VERBOSE (-vv)", "correct": false},
+      {"id": "c", "text": "OutputInterface::VERBOSITY_VERBOSE (-v)", "correct": false},
+      {"id": "d", "text": "OutputInterface::VERBOSITY_LOUD", "correct": false}
+    ],
+    "explanation": "Verbosity levels: QUIET (-q), NORMAL (default), VERBOSE (-v), VERY_VERBOSE (-vv), DEBUG (-vvv). DEBUG is the most verbose and includes all output.",
+    "doc_url": "https://symfony.com/doc/current/console/verbosity.html"
+  },
+  {
+    "id": "console-004",
+    "type": "multiple",
+    "question": "Which of the following are built-in Symfony console helpers? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "ProgressBar", "correct": true},
+      {"id": "b", "text": "Table", "correct": true},
+      {"id": "c", "text": "QuestionHelper", "correct": true},
+      {"id": "d", "text": "FileDownloader", "correct": false}
+    ],
+    "explanation": "Symfony Console provides ProgressBar, Table, QuestionHelper (for interactive prompts), DebugFormatterHelper, and more. There is no built-in FileDownloader helper.",
+    "doc_url": "https://symfony.com/doc/current/components/console/helpers/index.html"
+  }
+]

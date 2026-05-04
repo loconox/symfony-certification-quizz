@@ -1,0 +1,52 @@
+[
+  {
+    "id": "di-001",
+    "type": "single",
+    "question": "What does Symfony's autowiring do?",
+    "answers": [
+      {"id": "a", "text": "Automatically injects service dependencies based on type hints", "correct": true},
+      {"id": "b", "text": "Automatically generates service definitions from class annotations", "correct": false},
+      {"id": "c", "text": "Automatically creates database migrations for entities", "correct": false},
+      {"id": "d", "text": "Automatically wires event listeners without configuration", "correct": false}
+    ],
+    "explanation": "Autowiring reads constructor type hints and automatically resolves and injects the corresponding services from the container. Manual configuration is only needed for ambiguous cases.",
+    "doc_url": "https://symfony.com/doc/current/service_container/autowiring.html"
+  },
+  {
+    "id": "di-002",
+    "type": "boolean",
+    "question": "In Symfony, services are lazy (not instantiated) by default until they are actually needed.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Services are eagerly instantiated by default when the container is built. However, you can explicitly mark a service as 'lazy: true' to defer its instantiation.",
+    "doc_url": "https://symfony.com/doc/current/service_container/lazy_services.html"
+  },
+  {
+    "id": "di-003",
+    "type": "single",
+    "question": "Which DI feature allows you to replace a service with a decorated wrapper while keeping the original available?",
+    "answers": [
+      {"id": "a", "text": "Service decoration", "correct": true},
+      {"id": "b", "text": "Service aliasing", "correct": false},
+      {"id": "c", "text": "Compiler passes", "correct": false},
+      {"id": "d", "text": "Tagged services", "correct": false}
+    ],
+    "explanation": "Service decoration (using 'decorates' or #[AsDecorator]) wraps an existing service. The decorated service is renamed and injected as the 'inner' service into the decorator.",
+    "doc_url": "https://symfony.com/doc/current/service_container/service_decoration.html"
+  },
+  {
+    "id": "di-004",
+    "type": "multiple",
+    "question": "Which are valid ways to register services in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Auto-discovery via resource glob in services.yaml", "correct": true},
+      {"id": "b", "text": "PHP attributes like #[AsService] (via PHP config)", "correct": true},
+      {"id": "c", "text": "Explicit declaration in services.yaml", "correct": true},
+      {"id": "d", "text": "JSON configuration file", "correct": false}
+    ],
+    "explanation": "Symfony supports YAML, PHP, and XML for service configuration, as well as auto-discovery. JSON is not a supported format for Symfony DI configuration.",
+    "doc_url": "https://symfony.com/doc/current/service_container.html"
+  }
+]

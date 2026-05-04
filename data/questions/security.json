@@ -1,0 +1,52 @@
+[
+  {
+    "id": "security-001",
+    "type": "single",
+    "question": "In Symfony Security, what is a Voter used for?",
+    "answers": [
+      {"id": "a", "text": "To implement custom authorization logic for specific resources or actions", "correct": true},
+      {"id": "b", "text": "To handle user authentication", "correct": false},
+      {"id": "c", "text": "To define firewall rules", "correct": false},
+      {"id": "d", "text": "To encrypt passwords", "correct": false}
+    ],
+    "explanation": "Voters handle fine-grained authorization decisions. They implement VoterInterface and respond to specific attribute+subject combinations (e.g., 'EDIT' on a Post object).",
+    "doc_url": "https://symfony.com/doc/current/security/voters.html"
+  },
+  {
+    "id": "security-002",
+    "type": "boolean",
+    "question": "The ROLE_ADMIN role automatically includes ROLE_USER in Symfony's default configuration.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": false},
+      {"id": "false", "text": "Faux", "correct": true}
+    ],
+    "explanation": "Role hierarchy must be explicitly configured in security.yaml using 'role_hierarchy'. Without it, roles are independent and ROLE_ADMIN does not include ROLE_USER.",
+    "doc_url": "https://symfony.com/doc/current/security.html#roles"
+  },
+  {
+    "id": "security-003",
+    "type": "single",
+    "question": "Which Symfony security component handles password hashing?",
+    "answers": [
+      {"id": "a", "text": "PasswordHasherInterface via the PasswordHasher component", "correct": true},
+      {"id": "b", "text": "EncoderFactory from SecurityBundle", "correct": false},
+      {"id": "c", "text": "UserPasswordEncoder (deprecated)", "correct": false},
+      {"id": "d", "text": "CryptoHasher from HttpFoundation", "correct": false}
+    ],
+    "explanation": "The PasswordHasher component (introduced in Symfony 5.3) provides PasswordHasherInterface and UserPasswordHasherInterface. The old UserPasswordEncoder is deprecated.",
+    "doc_url": "https://symfony.com/doc/current/security/passwords.html"
+  },
+  {
+    "id": "security-004",
+    "type": "multiple",
+    "question": "Which are valid Symfony firewall authenticators? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "FormLoginAuthenticator", "correct": true},
+      {"id": "b", "text": "HttpBasicAuthenticator", "correct": true},
+      {"id": "c", "text": "Custom authenticator implementing AuthenticatorInterface", "correct": true},
+      {"id": "d", "text": "JWTAuthenticator (built-in)", "correct": false}
+    ],
+    "explanation": "Symfony has built-in authenticators for form login and HTTP basic auth. Custom authenticators implement AuthenticatorInterface. JWT support requires a third-party bundle like lexik/jwt-authentication-bundle.",
+    "doc_url": "https://symfony.com/doc/current/security/custom_authenticator.html"
+  }
+]

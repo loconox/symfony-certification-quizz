@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Question {{ index }}/{{ total }} — Symfony Certification Quiz{% endblock %}
+
+{% block body %}
+{# Progress bar #}
+<div class="mb-6">
+    <div class="flex justify-between text-sm text-gray-500 mb-2">
+        <span>Question {{ index }} sur {{ total }}</span>
+        <span class="bg-gray-100 px-2 py-0.5 rounded text-xs font-medium">{{ question.theme|replace({'-': ' '})|title }}</span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-2">
+        <div class="bg-gray-800 h-2 rounded-full transition-all duration-300"
+             style="width: {{ (index / total * 100)|round }}%"></div>
+    </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+    {# Question type badge #}
+    <div class="mb-4">
+        {% if question.type == 'boolean' %}
+            <span class="bg-blue-100 text-blue-700 text-xs font-medium px-3 py-1 rounded-full">Vrai / Faux</span>
+        {% elseif question.type == 'single' %}
+            <span class="bg-purple-100 text-purple-700 text-xs font-medium px-3 py-1 rounded-full">Réponse unique</span>
+        {% else %}
+            <span class="bg-orange-100 text-orange-700 text-xs font-medium px-3 py-1 rounded-full">Choix multiple</span>
+        {% endif %}
+    </div>
+
+    {# Question text #}
+    <h2 class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">{{ question.question }}</h2>
+
+    {# Answers form #}
+    <form method="POST" action="{{ path('quiz_answer', {index: index}) }}" id="quiz-form">
+        <div class="space-y-3 mb-8">
+            {% for answer in question.answers %}
+                <label class="flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all
+                              {% if already_answered %}
+                                  {% if answer.id in user_answers and answer.correct %}border-green-400 bg-green-50
+                                  {% elseif answer.id in user_answers and not answer.correct %}border-red-400 bg-red-50
+                                  {% elseif answer.correct %}border-green-300 bg-green-50
+                                  {% else %}border-gray-200 bg-gray-50
+                                  {% endif %}
+                              {% else %}
+                                  border-gray-200 hover:border-gray-400 hover:bg-gray-50
+                              {% endif %}">
+                    <input type="{{ question.type == 'multiple' ? 'checkbox' : 'radio' }}"
+                           name="answers[]"
+                           value="{{ answer.id }}"
+                           {% if already_answered %}disabled{% endif %}
+                           {% if answer.id in user_answers %}checked{% endif %}
+                           class="mt-0.5 accent-gray-800">
+                    <span class="text-gray-700 leading-snug">{{ answer.text }}</span>
+                    {% if already_answered and answer.correct %}
+                        <span class="ml-auto text-green-600 text-sm font-medium shrink-0">✓ correct</span>
+                    {% endif %}
+                </label>
+            {% endfor %}
+        </div>
+
+        <div class="flex items-center justify-between">
+            {% if index > 1 %}
+                <a href="{{ path('quiz_question', {index: index - 1}) }}"
+                   class="text-gray-500 hover:text-gray-700 text-sm transition-colors">
+                    ← Précédente
+                </a>
+            {% else %}
+                <span></span>
+            {% endif %}
+
+            {% if not already_answered %}
+                <button type="submit"
+                        class="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors">
+                    {% if index == total %}Terminer le quiz{% else %}Suivante →{% endif %}
+                </button>
+            {% else %}
+                <a href="{{ index == total ? path('quiz_results') : path('quiz_question', {index: index + 1}) }}"
+                   class="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors">
+                    {% if index == total %}Voir les résultats{% else %}Suivante →{% endif %}
+                </a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

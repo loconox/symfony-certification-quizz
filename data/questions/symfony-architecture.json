@@ -1,0 +1,317 @@
+[
+  {
+    "id": "architecture-001",
+    "type": "single",
+    "question": "What is the role of Symfony Flex?",
+    "answers": [
+      {"id": "a", "text": "A Composer plugin that automates bundle configuration via recipes", "correct": true},
+      {"id": "b", "text": "A caching layer for Symfony services", "correct": false},
+      {"id": "c", "text": "A CLI tool to generate Symfony entities", "correct": false},
+      {"id": "d", "text": "A build system for Symfony assets", "correct": false}
+    ],
+    "explanation": "Symfony Flex is a Composer plugin that hooks into the install/update process to automatically apply configuration recipes from the official recipe repository, simplifying package setup.",
+    "doc_url": "https://symfony.com/doc/current/setup/flex.html"
+  },
+  {
+    "id": "architecture-002",
+    "type": "boolean",
+    "question": "Symfony components can be used independently, outside of the Symfony full-stack framework.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Symfony components are decoupled standalone PHP libraries. They can be used in any PHP project via Composer, without the full framework.",
+    "doc_url": "https://symfony.com/components"
+  },
+  {
+    "id": "architecture-003",
+    "type": "multiple",
+    "question": "Which of the following are kernel events dispatched during a typical Symfony HTTP request? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "kernel.request", "correct": true},
+      {"id": "b", "text": "kernel.controller", "correct": true},
+      {"id": "c", "text": "kernel.response", "correct": true},
+      {"id": "d", "text": "kernel.boot", "correct": false}
+    ],
+    "explanation": "The main kernel events are: kernel.request, kernel.controller, kernel.controller_arguments, kernel.view, kernel.response, kernel.finish_request, kernel.terminate, kernel.exception. There is no 'kernel.boot' event.",
+    "doc_url": "https://symfony.com/doc/current/reference/events.html"
+  },
+  {
+    "id": "architecture-004",
+    "type": "single",
+    "question": "According to Symfony's backward compatibility promise, what kind of changes can occur in a minor version (e.g., 7.0 → 7.1)?",
+    "answers": [
+      {"id": "a", "text": "New features and deprecation of existing ones", "correct": true},
+      {"id": "b", "text": "Removal of deprecated features", "correct": false},
+      {"id": "c", "text": "Breaking changes to public APIs", "correct": false},
+      {"id": "d", "text": "Changes to core service IDs", "correct": false}
+    ],
+    "explanation": "Minor versions add new features and may deprecate existing ones, but never break backward compatibility. Deprecated features are removed in the next major version (e.g., 8.0).",
+    "doc_url": "https://symfony.com/doc/current/contributing/code/bc.html"
+  },
+  {
+    "id": "architecture-005",
+    "type": "single",
+    "question": "Which environment variable controls the active environment (dev, prod, test) in a Symfony application?",
+    "answers": [
+      {"id": "a", "text": "APP_ENV", "correct": true},
+      {"id": "b", "text": "SYMFONY_ENV", "correct": false},
+      {"id": "c", "text": "KERNEL_ENV", "correct": false},
+      {"id": "d", "text": "APP_MODE", "correct": false}
+    ],
+    "explanation": "APP_ENV (defined in .env or as a real environment variable) is read by the Runtime component to instantiate the Kernel with the right environment. SYMFONY_ENV was used in older Symfony versions but is no longer the standard.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-006",
+    "type": "single",
+    "question": "What does the kernel.project_dir parameter contain?",
+    "answers": [
+      {"id": "a", "text": "The absolute path to the project's root directory", "correct": true},
+      {"id": "b", "text": "The name of the project as defined in composer.json", "correct": false},
+      {"id": "c", "text": "The path to the public/ directory", "correct": false},
+      {"id": "d", "text": "The path to the var/cache directory", "correct": false}
+    ],
+    "explanation": "kernel.project_dir is an automatic parameter exposing the absolute path to the project root (where composer.json lives). It is commonly used to build paths to other directories (config/, var/, templates/...).",
+    "doc_url": "https://symfony.com/doc/current/reference/configuration/kernel.html"
+  },
+  {
+    "id": "architecture-007",
+    "type": "boolean",
+    "question": "APP_ENV and APP_DEBUG are independent settings: you can run the prod environment with debug enabled, or the dev environment with debug disabled.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Although the dev environment defaults to debug=true and prod to debug=false, they are technically separate variables. You can run prod with debug temporarily enabled to investigate an issue, for example.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-008",
+    "type": "multiple",
+    "question": "Which directories belong to the default Symfony project structure? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "src/ — application code", "correct": true},
+      {"id": "b", "text": "config/ — configuration files", "correct": true},
+      {"id": "c", "text": "var/ — runtime files (cache, logs)", "correct": true},
+      {"id": "d", "text": "app/ — bootstrap files", "correct": false}
+    ],
+    "explanation": "Modern Symfony (since 4.x) uses src/, config/, public/, var/, vendor/, bin/, templates/. The legacy app/ directory was removed when Flex became the default — bootstrap is in public/index.php and bin/console.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-009",
+    "type": "single",
+    "question": "What is the role of MicroKernelTrait in a default Symfony application?",
+    "answers": [
+      {"id": "a", "text": "It provides default implementations for registerBundles, configureContainer and configureRoutes inside the Kernel class", "correct": true},
+      {"id": "b", "text": "It is a lightweight kernel for serverless deployments", "correct": false},
+      {"id": "c", "text": "It is used only by microservices to skip bundle loading", "correct": false},
+      {"id": "d", "text": "It replaces the dependency injection container with a smaller one", "correct": false}
+    ],
+    "explanation": "MicroKernelTrait removes the need for a dedicated Bundle Extension class by letting the Kernel itself load bundle config and routes from config/packages/ and config/routes.yaml. It is used in default Symfony applications.",
+    "doc_url": "https://symfony.com/doc/current/configuration/micro_kernel_trait.html"
+  },
+  {
+    "id": "architecture-010",
+    "type": "single",
+    "question": "What does the env var processor json: do, e.g. %env(json:APP_PROVIDERS)%?",
+    "answers": [
+      {"id": "a", "text": "It JSON-decodes the env var value into a PHP array", "correct": true},
+      {"id": "b", "text": "It JSON-encodes the env var value to a string", "correct": false},
+      {"id": "c", "text": "It validates that the env var is a valid JSON string and throws otherwise", "correct": false},
+      {"id": "d", "text": "It loads a JSON file whose name is given by the env var", "correct": false}
+    ],
+    "explanation": "Env var processors transform values resolved at runtime. json: applies json_decode to the env var content, returning an array (or object). Other processors include int:, bool:, base64:, csv:, file:, resolve:, default: and trim:.",
+    "doc_url": "https://symfony.com/doc/current/configuration/env_var_processors.html"
+  },
+  {
+    "id": "architecture-011",
+    "type": "multiple",
+    "question": "Which .env-style files are loaded by Symfony at runtime? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": ".env — committed defaults for all environments", "correct": true},
+      {"id": "b", "text": ".env.local — machine-specific overrides, ignored by git", "correct": true},
+      {"id": "c", "text": ".env.prod — committed overrides for the prod environment", "correct": true},
+      {"id": "d", "text": ".env.shared — shared between several projects", "correct": false}
+    ],
+    "explanation": "Symfony loads .env, .env.local, .env.{APP_ENV} and .env.{APP_ENV}.local, in that order of precedence (most specific wins). Real OS environment variables always override these files. There is no .env.shared convention.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-012",
+    "type": "boolean",
+    "question": "The symfony.lock file should be committed to the repository to ensure that the same Flex recipes are applied across environments and developer machines.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "symfony.lock tracks which Flex recipes have been applied and in which version. Committing it ensures reproducibility — Flex won't reapply or skip recipes inconsistently between checkouts.",
+    "doc_url": "https://symfony.com/doc/current/setup/flex.html"
+  },
+  {
+    "id": "architecture-013",
+    "type": "single",
+    "question": "What is the purpose of config/bundles.php?",
+    "answers": [
+      {"id": "a", "text": "It declares which bundles are enabled and in which environments", "correct": true},
+      {"id": "b", "text": "It registers compiler passes for the dependency injection container", "correct": false},
+      {"id": "c", "text": "It maps bundles to their configuration files in config/packages/", "correct": false},
+      {"id": "d", "text": "It defines the load order of services for each bundle", "correct": false}
+    ],
+    "explanation": "config/bundles.php returns an array mapping bundle classes to environments, e.g. ['Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle' => ['all' => true], 'Symfony\\Bundle\\DebugBundle\\DebugBundle' => ['dev' => true, 'test' => true]]. Symfony Flex updates it automatically when packages are installed.",
+    "doc_url": "https://symfony.com/doc/current/bundles.html"
+  },
+  {
+    "id": "architecture-014",
+    "type": "multiple",
+    "question": "What can a Compiler Pass do during container compilation? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "Modify or remove existing service definitions", "correct": true},
+      {"id": "b", "text": "Find services tagged with a given tag and inject them into another service", "correct": true},
+      {"id": "c", "text": "Add or replace service arguments based on configuration", "correct": true},
+      {"id": "d", "text": "Execute database migrations before booting the kernel", "correct": false}
+    ],
+    "explanation": "Compiler passes run at compile time and operate on ContainerBuilder. They are the primary mechanism to wire tagged services, optimize definitions, or replace classes. They never run at request time and have no access to runtime services like the database.",
+    "doc_url": "https://symfony.com/doc/current/service_container/compiler_passes.html"
+  },
+  {
+    "id": "architecture-015",
+    "type": "single",
+    "question": "Where is the compiled service container stored at runtime?",
+    "answers": [
+      {"id": "a", "text": "In var/cache/{env}/ as PHP files (e.g. App_KernelDevDebugContainer.php)", "correct": true},
+      {"id": "b", "text": "In memory only, rebuilt for each request", "correct": false},
+      {"id": "c", "text": "In vendor/symfony/cache/", "correct": false},
+      {"id": "d", "text": "In a SQLite database under var/", "correct": false}
+    ],
+    "explanation": "The container is compiled once into PHP files placed in var/cache/{env}/, then included as plain PHP on each request. This makes service resolution extremely fast, with no per-request compilation cost.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-016",
+    "type": "single",
+    "question": "What does the 'when@env' YAML syntax (e.g. 'when@prod:') allow you to do in a config file?",
+    "answers": [
+      {"id": "a", "text": "Apply a block of configuration only when the kernel runs in the specified environment", "correct": true},
+      {"id": "b", "text": "Schedule the configuration block to be applied at a specific time", "correct": false},
+      {"id": "c", "text": "Mark the configuration as deprecated and removed in a future env", "correct": false},
+      {"id": "d", "text": "Conditionally enable a bundle based on a feature flag", "correct": false}
+    ],
+    "explanation": "The 'when@env' syntax lets you keep environment-specific overrides in the same YAML file as the default configuration, instead of a separate config/packages/{env}/ file. The block is only applied when APP_ENV matches.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-017",
+    "type": "boolean",
+    "question": "Real OS environment variables always take precedence over values defined in any .env file.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Symfony's Dotenv component never overwrites variables that are already set in the real environment. This makes it safe to deploy with real env vars in production while keeping .env as a fallback for development.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-018",
+    "type": "multiple",
+    "question": "Which of the following typically belong in config/packages/? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "framework.yaml — configuration of the FrameworkBundle", "correct": true},
+      {"id": "b", "text": "twig.yaml — configuration of the TwigBundle", "correct": true},
+      {"id": "c", "text": "doctrine.yaml — configuration of the DoctrineBundle", "correct": true},
+      {"id": "d", "text": "routes.yaml — top-level route definitions", "correct": false}
+    ],
+    "explanation": "config/packages/ holds bundle configuration files, one per bundle (framework, twig, doctrine, security, etc.). Routing files live in config/routes.yaml or config/routes/, not in config/packages/.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-019",
+    "type": "single",
+    "question": "What does Symfony Flex actually do when you require a package?",
+    "answers": [
+      {"id": "a", "text": "It applies a recipe that registers the bundle, generates config files, and updates symfony.lock", "correct": true},
+      {"id": "b", "text": "It installs the package globally so all projects can share it", "correct": false},
+      {"id": "c", "text": "It downloads the package source from GitHub and patches it for Symfony", "correct": false},
+      {"id": "d", "text": "It builds a custom Composer plugin for that package", "correct": false}
+    ],
+    "explanation": "Flex is a Composer plugin. When a package has a recipe, Flex applies it: it adds the bundle to config/bundles.php, scaffolds default configuration in config/packages/, may add env vars to .env, and tracks the recipe in symfony.lock.",
+    "doc_url": "https://symfony.com/doc/current/setup/flex.html"
+  },
+  {
+    "id": "architecture-020",
+    "type": "single",
+    "question": "Given the default composer.json mapping \"App\\\\\": \"src/\", which file is loaded for the class App\\Entity\\User?",
+    "answers": [
+      {"id": "a", "text": "src/Entity/User.php", "correct": true},
+      {"id": "b", "text": "src/App/Entity/User.php", "correct": false},
+      {"id": "c", "text": "src/entity/user.php", "correct": false},
+      {"id": "d", "text": "vendor/app/entity/User.php", "correct": false}
+    ],
+    "explanation": "PSR-4 maps a namespace prefix to a base directory: 'App\\' → 'src/'. The remaining namespace becomes the relative path with the class name appended. App\\Entity\\User → src/Entity/User.php (case-sensitive on most filesystems).",
+    "doc_url": "https://www.php-fig.org/psr/psr-4/"
+  },
+  {
+    "id": "architecture-021",
+    "type": "boolean",
+    "question": "When kernel.debug is true, Symfony enables features like detailed exception pages, the web profiler, and Twig's debug functions.",
+    "answers": [
+      {"id": "true", "text": "Vrai", "correct": true},
+      {"id": "false", "text": "Faux", "correct": false}
+    ],
+    "explanation": "Debug mode enables developer-friendly features that are too costly or insecure for production: rich exception traces, the web profiler/toolbar (when WebProfilerBundle is active), and Twig's debug extension functions like dump().",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-022",
+    "type": "single",
+    "question": "What is the role of public/index.php in a Symfony application?",
+    "answers": [
+      {"id": "a", "text": "It is the front controller that bootstraps the kernel and handles every HTTP request", "correct": true},
+      {"id": "b", "text": "It is a static landing page served by the web server", "correct": false},
+      {"id": "c", "text": "It is generated automatically and should not be modified", "correct": false},
+      {"id": "d", "text": "It is the entry point only for HTTPS requests", "correct": false}
+    ],
+    "explanation": "public/ is the document root exposed by the web server, and index.php is the single entry point: it loads the autoloader and the Runtime component, which instantiates the Kernel and dispatches the Request to it.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-023",
+    "type": "multiple",
+    "question": "Which of the following are valid env var processors in Symfony? (select all that apply)",
+    "answers": [
+      {"id": "a", "text": "bool: — converts the value to a boolean", "correct": true},
+      {"id": "b", "text": "base64: — base64-decodes the value", "correct": true},
+      {"id": "c", "text": "default: — provides a fallback if the env var is not set", "correct": true},
+      {"id": "d", "text": "encrypt: — automatically encrypts the value at rest", "correct": false}
+    ],
+    "explanation": "Symfony ships processors for casting and transforming values: int:, bool:, float:, string:, json:, base64:, csv:, file:, require:, resolve:, trim:, default:, const:, url:, query_string:, etc. There is no built-in 'encrypt:' processor.",
+    "doc_url": "https://symfony.com/doc/current/configuration/env_var_processors.html"
+  },
+  {
+    "id": "architecture-024",
+    "type": "single",
+    "question": "Where is the recommended place to define container parameters that are specific to your application?",
+    "answers": [
+      {"id": "a", "text": "Under the 'parameters:' key in config/services.yaml", "correct": true},
+      {"id": "b", "text": "Inside public/index.php before booting the kernel", "correct": false},
+      {"id": "c", "text": "In a dedicated parameters.yaml file under bin/", "correct": false},
+      {"id": "d", "text": "In environment variables only — parameters are deprecated", "correct": false}
+    ],
+    "explanation": "config/services.yaml has a top-level 'parameters:' section for application parameters. Bundle-specific parameters belong in config/packages/. Parameters are not deprecated, but for values that change between environments you typically read them from env vars.",
+    "doc_url": "https://symfony.com/doc/current/configuration.html"
+  },
+  {
+    "id": "architecture-025",
+    "type": "single",
+    "question": "When extending AbstractBundle, what is the purpose of the loadExtension() method?",
+    "answers": [
+      {"id": "a", "text": "It registers the bundle's services into the container based on the already-merged configuration", "correct": true},
+      {"id": "b", "text": "It loads PHP extensions required by the bundle (e.g. ext-intl)", "correct": false},
+      {"id": "c", "text": "It loads compiled translations into memory", "correct": false},
+      {"id": "d", "text": "It is called only when the bundle is uninstalled by Flex", "correct": false}
+    ],
+    "explanation": "AbstractBundle::loadExtension() is the modern replacement for a separate Extension class. Symfony calls it during container compilation with the validated and merged bundle configuration, and you use it to load services and set parameters.",
+    "doc_url": "https://symfony.com/doc/current/bundles/extension.html"
+  }
+]
